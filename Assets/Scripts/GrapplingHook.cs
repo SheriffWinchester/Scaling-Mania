@@ -7,10 +7,12 @@ public class GrapplingHook : MonoBehaviour
     Camera mainCamera;
     //bool grappleEnabled = false;
     bool grappleAnchored = false;
-    bool hookLineEnabled = false;
+    public bool hookResetEnabled = false;
     public Vector2 hitPosition;
+    Vector2 mousePos;
     SpringJoint2D springJoint2D;
     TrackManager trackManager;
+    RaycastHit2D hit;
     
     void Start()
     {
@@ -26,33 +28,46 @@ public class GrapplingHook : MonoBehaviour
             {
                 grappleAnchored = true;
 
-                Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);   
+                mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);   
                 Vector2 direction = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
-                var hit = Physics2D.Linecast(transform.position, mousePos);
-                Debug.Log(hit.collider.tag);
-
-                if (hit.collider.tag == "Ground") 
+                hit = Physics2D.Linecast(transform.position, mousePos);
+                if (hit.collider != null)
                 {
-                    hitPosition = hit.point;
+                    Debug.Log(hit.collider.tag);
 
-                    springJoint2D.enabled = true;
-                    springJoint2D.connectedAnchor = hitPosition;
+                    if (hit.collider.tag == "Ground") 
+                    {
+                        hitPosition = hit.point;
+
+                        springJoint2D.enabled = true;
+                        springJoint2D.connectedAnchor = hitPosition;
+                    }
                 }
+                
             }
             
-            if (TrackManager.needReset == false) 
+            if (hookResetEnabled == false && hit.collider != null) 
             {
                 Debug.DrawLine(transform.position, hitPosition);
-            } else {
-                Debug.Log("NeedReset: " + TrackManager.needReset);
-                Debug.Log("Hook: " + trackManager.hookPosReset);
+            } 
+            if (hookResetEnabled == true && hit.collider != null) //Activate the hook's position accordingly after the reset (TrackManager.cs) 
+            {
                 Debug.DrawLine(transform.position, trackManager.hookPosReset);
+            }
+            if (hit.collider == null)
+            {
+                Debug.DrawLine(transform.position, mousePos);
             }
             
         }
         else {
             springJoint2D.enabled = false;
             grappleAnchored = false;
+            hookResetEnabled = false;
         }
+    }
+    void Hook()
+    {
+        
     }
 }

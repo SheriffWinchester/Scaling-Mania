@@ -14,15 +14,18 @@ public class TrackManager : MonoBehaviour
     void Start()
     {
         player = this.gameObject.transform.GetChild(0);
-        springJoint2D = player.GetComponent<SpringJoint2D>();
-        Debug.Log(player.name);
         grapplingHook = GameObject.Find("Player").GetComponent<GrapplingHook>();
+        springJoint2D = player.GetComponent<SpringJoint2D>();
+        //Debug.Log(player.name);
     }
     void Update()
     {
-        //Debug.Log(grapplingHook.hitPosition);
-        //Debug.Log(player.localPosition);
-        if (player.localPosition.y > 17 && needReset == false)//When reached the border - reset the world to the default position
+        ResetWorldPosition();
+        needReset = false;
+    }
+    void ResetWorldPosition()
+    {
+        if (player.position.y > 17 && needReset == false) //When reached the border - reset the world to the default position
         {
             needReset = true;
 
@@ -36,9 +39,11 @@ public class TrackManager : MonoBehaviour
             //springJoint2D.connectedAnchor = hookPosReset;
 
             Debug.Log(springJoint2D.enabled);
+            //Debug.Log("Global: " + player.position);
+            Debug.Log("Local: " + player.localPosition);
             //Debug.Log(transform.localPosition);
+            grapplingHook.hookResetEnabled = true; //Activate the hook's position accordingly after the reset
         }
-        //needReset = false;
     }
     
 }
