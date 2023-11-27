@@ -5,56 +5,50 @@ using UnityEngine;
 public class GrapplingHook : MonoBehaviour
 {
     Camera mainCamera;
-    bool grappleEnabled = false;
+    //bool grappleEnabled = false;
     bool grappleAnchored = false;
-    Vector2 hitPosition;
+    bool hookLineEnabled = false;
+    public Vector2 hitPosition;
     SpringJoint2D springJoint2D;
+    TrackManager trackManager;
+    
     void Start()
     {
         mainCamera = Camera.main;
         springJoint2D = GetComponent<SpringJoint2D>();
+        trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButton(0))
         {
-            if (grappleAnchored == false)
+            if (grappleAnchored == false) //Executed only once until the action button is released
             {
+                grappleAnchored = true;
+
                 Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);   
                 Vector2 direction = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
                 var hit = Physics2D.Linecast(transform.position, mousePos);
                 Debug.Log(hit.collider.tag);
-                if (hit.collider.tag == "Ground")
+
+                if (hit.collider.tag == "Ground") 
                 {
-                    //Debug.Log("Hit point: " + hit.point);
-                    //Debug.Log(hit.collider.tag);
                     hitPosition = hit.point;
-                    grappleEnabled = true;
+
                     springJoint2D.enabled = true;
                     springJoint2D.connectedAnchor = hitPosition;
                 }
-
-                grappleAnchored = true;
             }
-            Debug.DrawLine(transform.position, hitPosition);
             
-
-            // if (hit.collider != null)
-            // {
-            //     // _LineRenderer.SetPosition(0, transform.position);
-            //     // _LineRenderer.SetPosition(1, hit.transform.position);
-            //     // _LineRenderer.enabled = true;
-
-            //     Vector2 _force = transform.position - hit.transform.position;
-            //     Vector2 _normForce = Vector3.Normalize(_force);
-            //     hit.rigidbody.velocity = _normForce * 5.0f;
-            // } 
-            // else 
-            // {
-            //     _LineRenderer.enabled = false;
-            // }
+            if (TrackManager.needReset == false) 
+            {
+                Debug.DrawLine(transform.position, hitPosition);
+            } else {
+                Debug.Log("NeedReset: " + TrackManager.needReset);
+                Debug.Log("Hook: " + trackManager.hookPosReset);
+                Debug.DrawLine(transform.position, trackManager.hookPosReset);
+            }
+            
         }
         else {
             springJoint2D.enabled = false;

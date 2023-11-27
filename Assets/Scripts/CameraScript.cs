@@ -9,10 +9,8 @@ public class CameraScript : MonoBehaviour
     {
         m_mainCamera = Camera.main;
     }
-
-    // Update is called once per frame
     void Update()
     {
-        m_mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y, (transform.position.z - 10));
+        m_mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y, (transform.position.z - 10)); //Follow the player
     }
 }
