@@ -32,21 +32,25 @@ public class PlatformGenerator : MonoBehaviour
 
             GameObject platform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
             platforms.Add(platform);
-
-            while (IsTooCloseToExistingPlatform(spawnPosition) == true)
+            if (platforms.Count > 1)
             {
-                spawnPosition.x = Random.Range(minX, maxX);
-                spawnPosition.y = Random.Range(minY, maxY);
+                if (IsTooCloseToExistingPlatform(spawnPosition) == true)
+                {
+                    platforms[i].transform.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+                    // platforms[i].transform.position.y = Random.Range(minY, maxY);
+                }
             }
+            
         }
 
         Singleton.instance.startPlatformsSpawn = false;
     }
     bool IsTooCloseToExistingPlatform(Vector2 position)
     {
-        foreach (GameObject platform in platforms)
+
+        for (int i = 1; i < platforms.Count; i++)
         {
-            float distance = Vector2.Distance(position, platform.transform.position);
+            float distance = Vector2.Distance(position, platforms[i].transform.position);
             if (distance < minDistanceBetweenPlatforms)
             {
                 Debug.Log("Close");
