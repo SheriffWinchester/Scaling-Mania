@@ -11,6 +11,6 @@ public class CameraScript : MonoBehaviour
     }
     void Update()
     {
-        m_mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y, (transform.position.z - 10)); //Follow the player
+        m_mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 4f, (transform.position.z - 10)); //Follow the player
     }
 }

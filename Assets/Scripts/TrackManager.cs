@@ -20,7 +20,7 @@ public class TrackManager : MonoBehaviour
     }
     void Update()
     {
-        ResetWorldPosition();
+        //ResetWorldPosition();
         needReset = false;
     }
     void ResetWorldPosition()
