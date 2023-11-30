@@ -11,6 +11,11 @@ public class CameraScript : MonoBehaviour
     }
     void Update()
     {
-        m_mainCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 4f, (transform.position.z - 10)); //Follow the player
-    }
+        Vector3 screenPos = m_mainCamera.WorldToScreenPoint(transform.position); //Transform world position to the screen coordinates
+        if (screenPos.y >= Screen.height/2) //If player moves the center of the screen - move the camera
+        {
+            //Debug.Log("Works");
+            m_mainCamera.transform.position = new Vector3(m_mainCamera.transform.position.x, transform.position.y, (transform.position.z - 10));
+        }
+    }   
 }
