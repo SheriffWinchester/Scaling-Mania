@@ -10,8 +10,9 @@ public class PlatformGenerator : MonoBehaviour
     public float maxY;
     public float minX;
     public float maxX;
-    public float minDistanceBetweenPlatforms = 1.5f;
+    public float minDistanceBetweenPlatforms = 3f;
     private List<GameObject> platforms = new List<GameObject>();
+    int closeCount = 1;
 
     void Start()
     {
@@ -22,27 +23,47 @@ public class PlatformGenerator : MonoBehaviour
   
         numberOfPlatforms = Random.Range(4, 8);
         Vector2 spawnPosition = new Vector2();
+        spawnPosition.y = Random.Range(minY, maxY);
+        spawnPosition.x = Random.Range(minX, maxX);
 
-        for (int i = 0; i < numberOfPlatforms; i++)
+        Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
+        int loopCounts = 0;
+        for (int i = 1; i < numberOfPlatforms; i++)
         {
+            loopCounts++;
+            int countChecks = 0;
+            
             spawnPosition.y = Random.Range(minY, maxY);
             spawnPosition.x = Random.Range(minX, maxX);
-
             //Check proximity to existing platforms
 
             GameObject platform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
             platforms.Add(platform);
-            if (platforms.Count > 1)
-            {
-                if (IsTooCloseToExistingPlatform(spawnPosition) == true)
-                {
-                    platforms[i].transform.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
-                    // platforms[i].transform.position.y = Random.Range(minY, maxY);
-                }
-            }
-            
-        }
 
+            platform.layer = 10;
+            Collider2D hitCollider = Physics2D.OverlapCircle(platform.transform.position, minDistanceBetweenPlatforms, 1<<7); 
+            platform.layer = 7;
+            //Debug.Log(hitCollider.name);
+            while (hitCollider != null) {
+                countChecks++;
+                Debug.Log("Close");
+                platform.transform.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+                Debug.Log(platform.transform.position);
+                platform.layer = 10;
+                hitCollider = Physics2D.OverlapCircle(platform.transform.position, minDistanceBetweenPlatforms, 1<<7); 
+                platform.layer = 7;
+                // spawnPosition.y = Random.Range(minY, maxY);
+                // spawnPosition.x = Random.Range(minX, maxX);
+            }
+            Debug.Log("Count checks: " + countChecks);
+            // if (IsTooCloseToExistingPlatform(spawnPosition) == true && platforms.Count > 1)
+            // {
+            //     //Debug.Log("Close");
+            //     platforms[i].transform.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+            //     // platforms[i].transform.position.y = Random.Range(minY, maxY);
+            // }
+        }
+        Debug.Log(loopCounts);
         Singleton.instance.startPlatformsSpawn = false;
     }
     bool IsTooCloseToExistingPlatform(Vector2 position)
@@ -51,6 +72,7 @@ public class PlatformGenerator : MonoBehaviour
         for (int i = 1; i < platforms.Count; i++)
         {
             float distance = Vector2.Distance(position, platforms[i].transform.position);
+            closeCount++;
             if (distance < minDistanceBetweenPlatforms)
             {
                 Debug.Log("Close");
