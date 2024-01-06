@@ -9,7 +9,6 @@ public class LevelGenerator : MonoBehaviour
     public GameObject prefabLevelChunk;
     GameObject startChunk;
     GameObject player;
-    int difficultyScore;
     bool startPlatformsSpawn = false;
     void Start()
     { 
@@ -36,6 +35,7 @@ public class LevelGenerator : MonoBehaviour
 
     void SpawnChunks()
     {
+        Debug.Log("Difficulty score: " + Singleton.instance.difficultyScore);
         BoxCollider2D secondObject = chunks[1].GetComponent<BoxCollider2D>();
         if (secondObject != null)
         {
@@ -52,7 +52,7 @@ public class LevelGenerator : MonoBehaviour
                 Destroy(chunks[0]);
                 chunks.RemoveAt(0);
 
-                difficultyScore++; //Increase difficulty score of the game. After 3 it begins to spawn other platforms and enemies.
+                Singleton.instance.difficultyScore++; //Increase difficulty score of the game. After 3 it begins to spawn other platforms and enemies.
                 
             }
         }

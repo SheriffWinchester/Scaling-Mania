@@ -71,10 +71,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b562ecb32b3164390c2cfc7c5c1090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformPrefab: {fileID: 8051547228620932028, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
+  platformPrefab:
+  - {fileID: 8051547228620932028, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
+  - {fileID: 8051547228620932028, guid: 0795a7d783e4d4c8dac535a629ba6024, type: 3}
+  - {fileID: 8051547228620932028, guid: 0fa2cf00bc5f7420e961f27c3f164770, type: 3}
+  - {fileID: 8051547228620932028, guid: bfd56a523aa564ef7a2a115159eb9c49, type: 3}
   numberOfPlatforms: 0
   minY: -4.5
   maxY: 4.5
   minX: -2
   maxX: 2
-  minDistanceBetweenPlatforms: 1.5
+  fractionOfPlatforms: 0
+  minDistanceBetweenPlatforms: 1

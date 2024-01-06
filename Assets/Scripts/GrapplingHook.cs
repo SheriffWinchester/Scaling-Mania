@@ -10,14 +10,14 @@ public class GrapplingHook : MonoBehaviour
     public bool hookResetEnabled = false;
     public Vector2 hitPosition;
     Vector2 mousePos;
-    SpringJoint2D springJoint2D;
+    DistanceJoint2D springJoint2D;
     TrackManager trackManager;
     RaycastHit2D hit;
     
     void Start()
     {
         mainCamera = Camera.main;
-        springJoint2D = GetComponent<SpringJoint2D>();
+        springJoint2D = GetComponent<DistanceJoint2D>();
         trackManager = GameObject.Find("TrackManager").GetComponent<TrackManager>();
     }
     void Update()
@@ -35,7 +35,7 @@ public class GrapplingHook : MonoBehaviour
                 {
                     Debug.Log(hit.collider.tag);
 
-                    if (hit.collider.tag == "Ground") 
+                    if (hit.collider.tag == "Grappable") 
                     {
                         hitPosition = hit.point;
 

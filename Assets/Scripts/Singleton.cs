@@ -7,6 +7,8 @@ public class Singleton : MonoBehaviour
     public static Singleton instance; //{ get; private set; }
     public bool spawnChunk = false;
     public bool startPlatformsSpawn = false;
+    public int difficultyScore = 0;
+    public 
     private void Awake() 
     { 
         // If there is an instance, and it's not me, delete myself.

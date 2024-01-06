@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Tutorial_GrapplingRope : MonoBehaviour
+public class GrapplingRope : MonoBehaviour
 {
     [Header("General Refernces:")]
-    public Tutorial_GrapplingGun grapplingGun;
+    public GrapplingGun grapplingGun;
     public LineRenderer m_lineRenderer;
 
     [Header("General Settings:")]
@@ -21,7 +23,7 @@ public class Tutorial_GrapplingRope : MonoBehaviour
 
     float moveTime = 0;
 
-    [HideInInspector] public bool isGrappling = true;
+    public bool isGrappling = true;
 
     bool strightLine = true;
 
@@ -61,9 +63,11 @@ public class Tutorial_GrapplingRope : MonoBehaviour
     {
         if (!strightLine)
         {
-            if (m_lineRenderer.GetPosition(percision - 1).x == grapplingGun.grapplePoint.x)
+            float threshold = 0.01f; // You can adjust the threshold as needed
+            if (Mathf.Abs(m_lineRenderer.GetPosition(percision - 1).x - grapplingGun.grapplePoint.x) < threshold)
             {
                 strightLine = true;
+                Debug.Log("Straight");
             }
             else
             {
@@ -75,6 +79,7 @@ public class Tutorial_GrapplingRope : MonoBehaviour
             if (!isGrappling)
             {
                 grapplingGun.Grapple();
+                Debug.Log("Grappling");
                 isGrappling = true;
             }
             if (waveSize > 0)
