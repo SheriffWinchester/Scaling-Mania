@@ -48,6 +48,7 @@ public class GrapplingGun : MonoBehaviour
     [SerializeField] private float targetFrequncy = 1;
 
     [HideInInspector] public Vector2 grapplePoint;
+    [HideInInspector] public GameObject grappleObject;
     [HideInInspector] public Vector2 grappleDistanceVector;
     [HideInInspector] public RaycastHit2D _hit;
 
@@ -62,26 +63,24 @@ public class GrapplingGun : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Camera: " + m_camera.WorldToViewportPoint(transform.position));
+        //Debug.Log("Camera: " + m_camera.WorldToViewportPoint(transform.position));
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            Debug.Log("Gun script 1");
             SetGrapplePoint();
+            //grapplePoint = grappleObject.transform.InverseTransformPoint(grapplePoint);
         }
         else if (Input.GetKey(KeyCode.Mouse0))
         {
             Debug.Log("Connected body: " + m_springJoint2D.connectedBody.tag);
             if (grappleRope.enabled)
             {
+                Debug.Log("Gun script 2");
                 RotateGun(grapplePoint, false);
-                if (_hit.collider != null)
-                {
-                    // Update connected anchor position based on the slide platform's position
-                    Vector2 connectedAnchorPos = _hit.collider.transform.InverseTransformPoint(grapplePoint);
-                    m_springJoint2D.connectedAnchor = connectedAnchorPos;
-                }
             }
             else
             {
+                Debug.Log("Gun script 3");
                 Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
                 RotateGun(mousePos, true);
             }
@@ -107,7 +106,7 @@ public class GrapplingGun : MonoBehaviour
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
             RotateGun(mousePos, true);
         }
-        
+        Debug.Log("Gun script 5");
     }
 
     void RotateGun(Vector3 lookPoint, bool allowRotationOverTime)
@@ -138,6 +137,8 @@ public class GrapplingGun : MonoBehaviour
                 if (Vector2.Distance(_hit.point, firePoint.position) <= maxDistnace || !hasMaxDistance)
                 {
                     grapplePoint = _hit.point;
+                    grappleObject = _hit.collider.gameObject;
+                    Debug.Log("Point on the platform: " + grapplePoint);
                     grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
                     grappleRope.enabled = true;
                     Debug.Log(grappleRope.enabled);
@@ -164,6 +165,7 @@ public class GrapplingGun : MonoBehaviour
             }
             //Debug.Log("Grapple point");
             m_springJoint2D.connectedAnchor = grapplePoint;
+            //m_springJoint2D.connectedBody = grappleObject.GetComponent<Rigidbody2D>();
             m_springJoint2D.enabled = true;
         }
         else
@@ -173,6 +175,7 @@ public class GrapplingGun : MonoBehaviour
                 case LaunchType.Physics_Launch:
                     //Debug.Log("Grapple point");
                     m_springJoint2D.connectedAnchor = grapplePoint;
+                    //m_springJoint2D.connectedBody = grappleObject.GetComponent<Rigidbody2D>();
 
                     Vector2 distanceVector = firePoint.position - gunHolder.position;
 

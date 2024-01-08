@@ -26,7 +26,7 @@ public class GrapplingRope : MonoBehaviour
     public bool isGrappling = true;
 
     bool strightLine = true;
-
+    public Vector2 previousPos;
     private void OnEnable()
     {
         moveTime = 0;
@@ -71,6 +71,7 @@ public class GrapplingRope : MonoBehaviour
             }
             else
             {
+                Debug.Log("Grapple script 1");
                 DrawRopeWaves();
             }
         }
@@ -81,18 +82,48 @@ public class GrapplingRope : MonoBehaviour
                 grapplingGun.Grapple();
                 Debug.Log("Grappling");
                 isGrappling = true;
+            } 
+            else
+            {
+                Debug.Log("Object: " + grapplingGun.grappleObject.name);
+                if (grapplingGun.grappleObject.GetComponent<Rigidbody2D>() != null)
+                {
+                    Debug.Log("Has rigidbody");
+                    Debug.Log("Has: " + grapplingGun.m_springJoint2D.connectedAnchor);
+
+                    // Get the current position of the grapple object
+                    Vector2 currentPos = grapplingGun.grappleObject.transform.position;
+                    Debug.Log("Current pos 1a: " + currentPos);
+
+                    // Calculate the offset
+                    Vector2 offsetPos = currentPos - previousPos;
+                    Debug.Log("Offset pos 1a: " + offsetPos);
+
+                    // Update the grapple point
+                    grapplingGun.grapplePoint = grapplingGun.grapplePoint - offsetPos;
+
+                    // Store the current position for the next frame
+                    previousPos = currentPos;
+                }
+            
+                //Vector2 diffVector = grapplingGun.grappleObject.transform.position - grapplingGun.grapplePoint; 
+                //grapplingGun.m_springJoint2D.connectedAnchor = grapplingGun.grappleObject.transform.TransformPoint(grapplingGun.grapplePoint);
+                Debug.Log("Position of the platform  " + grapplingGun.grappleObject.transform.position);
+                Debug.Log("Local of the platform  " + grapplingGun.grappleObject.transform.InverseTransformPoint(grapplingGun.grapplePoint));
             }
             if (waveSize > 0)
             {
+                Debug.Log("Grapple script 2");
                 waveSize -= Time.deltaTime * straightenLineSpeed;
                 DrawRopeWaves();
             }
             else
             {
+                //grapplingGun.grapplePoint = (Vector2)grapplingGun.grappleObject.transform.position + grapplingGun.grapplePoint;
                 waveSize = 0;
 
                 if (m_lineRenderer.positionCount != 2) { m_lineRenderer.positionCount = 2; }
-
+                Debug.Log("Grapple script 3");
                 DrawRopeNoWaves();
             }
         }
