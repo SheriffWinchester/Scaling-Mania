@@ -52,7 +52,6 @@ public class GrapplingRope : MonoBehaviour
             m_lineRenderer.SetPosition(i, grapplingGun.firePoint.position);
         }
     }
-
     private void Update()
     {
         moveTime += Time.deltaTime;
@@ -86,24 +85,28 @@ public class GrapplingRope : MonoBehaviour
             else
             {
                 Debug.Log("Object: " + grapplingGun.grappleObject.name);
+                grapplingGun.grapplePoint = grapplingGun.childObject.transform.position;
+                grapplingGun.m_springJoint2D.connectedAnchor = grapplingGun.grapplePoint;
                 if (grapplingGun.grappleObject.GetComponent<Rigidbody2D>() != null)
                 {
-                    Debug.Log("Has rigidbody");
-                    Debug.Log("Has: " + grapplingGun.m_springJoint2D.connectedAnchor);
+                    
+                    //grapplingGun.grapplePoint = childObject.transform.position;
+                //     Debug.Log("Has rigidbody");
+                //     Debug.Log("Has: " + grapplingGun.m_springJoint2D.connectedAnchor);
 
-                    // Get the current position of the grapple object
-                    Vector2 currentPos = grapplingGun.grappleObject.transform.position;
-                    Debug.Log("Current pos 1a: " + currentPos);
+                //     // Get the current position of the grapple object
+                //     Vector2 currentPos = grapplingGun.grappleObject.transform.position;
+                //     Debug.Log("Current pos 1a: " + currentPos);
 
-                    // Calculate the offset
-                    Vector2 offsetPos = currentPos - previousPos;
-                    Debug.Log("Offset pos 1a: " + offsetPos);
+                //     // Calculate the offset
+                //     Vector2 offsetPos = currentPos - previousPos;
+                //     Debug.Log("Offset pos 1a: " + offsetPos);
 
-                    // Update the grapple point
-                    grapplingGun.grapplePoint = grapplingGun.grapplePoint - offsetPos;
+                //     // Update the grapple point
+                //     grapplingGun.grapplePoint = grapplingGun.grapplePoint - offsetPos;
 
-                    // Store the current position for the next frame
-                    previousPos = currentPos;
+                //     // Store the current position for the next frame
+                //     previousPos = currentPos;
                 }
             
                 //Vector2 diffVector = grapplingGun.grappleObject.transform.position - grapplingGun.grapplePoint; 

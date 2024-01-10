@@ -1753,6 +1753,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   ropeProgressionSpeed: 15.2
   isGrappling: 1
+  previousPos: {x: 0, y: 0}
 --- !u!114 &792434033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1785,7 +1786,9 @@ MonoBehaviour:
   targetDistance: 3
   targetFrequncy: 1
   grapplePoint: {x: 0, y: 0}
+  grappleObject: {fileID: 0}
   grappleDistanceVector: {x: 0, y: 0}
+  childObject: {fileID: 0}
 --- !u!120 &792434034
 LineRenderer:
   m_ObjectHideFlags: 0

@@ -51,6 +51,7 @@ public class GrapplingGun : MonoBehaviour
     [HideInInspector] public GameObject grappleObject;
     [HideInInspector] public Vector2 grappleDistanceVector;
     [HideInInspector] public RaycastHit2D _hit;
+    public GameObject childObject;
 
     int layerMaskGrappable = 1 << 8;
 
@@ -58,6 +59,7 @@ public class GrapplingGun : MonoBehaviour
     {
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
+        childObject = new GameObject("ChildObject");
 
     }
 
@@ -68,6 +70,11 @@ public class GrapplingGun : MonoBehaviour
         {
             Debug.Log("Gun script 1");
             SetGrapplePoint();
+            // Set the position of the childObject to the grapplePoint
+            childObject.transform.position = grapplePoint;
+
+            // Set the parent of the childObject to the grappleObject
+            childObject.transform.SetParent(grappleObject.transform, true);
             //grapplePoint = grappleObject.transform.InverseTransformPoint(grapplePoint);
         }
         else if (Input.GetKey(KeyCode.Mouse0))
