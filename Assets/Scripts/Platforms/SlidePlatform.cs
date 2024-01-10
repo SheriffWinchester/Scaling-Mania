@@ -11,8 +11,9 @@ public class SlidePlatform : MonoBehaviour
     Vector2 viewportPosition;
     void Start()
     {
-        randomSide = Random.Range(0, 1);
+        randomSide = Random.Range(0, 2);//Random.Range(0, 1) return only 0, so we need to use 2 instead of 1.
         rb = GetComponent<Rigidbody2D>();
+        Debug.Log("Random side: " + randomSide);
     }
 
     // Update is called once per frame
@@ -20,8 +21,11 @@ public class SlidePlatform : MonoBehaviour
     {
         Slide();
         viewportPosition = Camera.main.WorldToViewportPoint(transform.position);
+        float halfWidth = GetComponent<SpriteRenderer>().bounds.size.x / 2;
+        float leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0)).x + halfWidth;
+        float rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0)).x - halfWidth;
         Debug.Log("Viewport position: " + viewportPosition);
-        if (viewportPosition.x < 0.00f || viewportPosition.x > 1.00f)
+        if (transform.position.x < leftBorder || transform.position.x > rightBorder)
         {
             Debug.Log("Viewport checks " + viewportPosition.x);
             Debug.Log("Random side: " + randomSide);
@@ -45,7 +49,7 @@ public class SlidePlatform : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         Debug.Log("Viewport checks " + viewportPosition.x);
-        Debug.Log("Random side: " + randomSide);
+        //Debug.Log("Random side: " + randomSide);
         // Change direction
         randomSide = 1 - randomSide;
     }
