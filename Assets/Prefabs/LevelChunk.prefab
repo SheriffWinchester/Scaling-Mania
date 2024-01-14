@@ -73,13 +73,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   platformPrefab:
   - {fileID: 8051547228620932028, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
+  - {fileID: 8051547228620932028, guid: bfd56a523aa564ef7a2a115159eb9c49, type: 3}
   - {fileID: 8051547228620932028, guid: 0795a7d783e4d4c8dac535a629ba6024, type: 3}
   - {fileID: 8051547228620932028, guid: 0fa2cf00bc5f7420e961f27c3f164770, type: 3}
-  - {fileID: 8051547228620932028, guid: bfd56a523aa564ef7a2a115159eb9c49, type: 3}
+  - {fileID: 8051547228620932028, guid: aadcef36c989d7a448e8b2f7d5c7b149, type: 3}
   numberOfPlatforms: 0
   minY: -4.5
   maxY: 4.5
   minX: -2
   maxX: 2
   fractionOfPlatforms: 0
-  minDistanceBetweenPlatforms: 1
+  minDistanceBetweenPlatforms: 0.5

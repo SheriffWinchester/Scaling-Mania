@@ -19,8 +19,6 @@ public class FallPlatform2 : MonoBehaviour
         grapplingRope = GameObject.Find("Player").GetComponent<GrapplingRope>();
         m_springJoint2D = GameObject.Find("Player").GetComponent<SpringJoint2D>();
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (shakes == false)
@@ -58,6 +56,7 @@ public class FallPlatform2 : MonoBehaviour
 
     void Fall()
     {
+        //When the player is grappling to this platform
         GameObject grapplingTarget = grapplingGun.GetCurrentTarget();
         if (grapplingTarget == this.gameObject && grapplingRope.isGrappling == true)
         {

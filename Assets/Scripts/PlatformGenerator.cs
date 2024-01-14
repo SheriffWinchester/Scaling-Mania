@@ -13,7 +13,8 @@ public class PlatformGenerator : MonoBehaviour
     public float minDistanceBetweenPlatforms = 3f;
     private List<GameObject> platforms = new List<GameObject>();
      int platformType1Count, platformType2Count, 
-        platformType3Count, platformType4Count;
+        platformType3Count, platformType4Count, platformType5Count;
+    int[] platformCounts; //0 - default, 1 - slide, 2 - fall1, 3 - fall2, 4 - snow
 
     private const int MaxPlacementAttempts = 10; // Maximum number of attempts to place a platform
     void Start()
@@ -29,11 +30,18 @@ public class PlatformGenerator : MonoBehaviour
         maxY = transform.localPosition.y + 4.5f;
         minX = transform.localPosition.x - 2f;
         maxX = transform.localPosition.x + 2f;
-        numberOfPlatforms = Random.Range(15, 30);
+        numberOfPlatforms = Random.Range(20, 35);
     }
-    int Fraction(int numberOfPlatforms, float fraction)
+    int[] Fraction(int numberOfPlatforms, float[] fractions)
     {
-        return (int)(numberOfPlatforms * fraction);
+        platformCounts = new int[fractions.Length];
+
+        for (int i = 0; i < fractions.Length; i++)
+        {
+            platformCounts[i] = (int)(numberOfPlatforms * fractions[i]);
+        }
+
+        return platformCounts;
     }
     
 
@@ -44,58 +52,89 @@ public class PlatformGenerator : MonoBehaviour
         Debug.Log("Number of platforms: " + numberOfPlatforms);
         GameObject platform = null;
         Vector2 spawnPosition = GetRandomPosition();
+
         if (diffScore < 1)
         {
-            platformType1Count = Fraction(numberOfPlatforms, 0.6f);
-            platformType2Count = 0;
-            platformType4Count = numberOfPlatforms - platformType1Count;
+            float[] fractions = new float[] { 0.5f, 0.3f, 0.2f, 0.0f, 0.0f }; // Fractions for each platform type
+            platformCounts = Fraction(numberOfPlatforms, fractions);
+            // platformType1Count = Fraction(numberOfPlatforms, 0.6f);
+            // platformType2Count = 0;
+            // platformType3Count = 0;
+            // platformType4Count = numberOfPlatforms - platformType1Count;
+            // platformType5Count = 
         }
-        else if (diffScore >= 1 && diffScore <= 3)
+        else if (diffScore >= 1 && diffScore < 3)
         {
-            platformType1Count = Fraction(numberOfPlatforms, 0.6f);
-            platformType2Count = numberOfPlatforms - platformType1Count;
+            float[] fractions = new float[] { 0.2f, 0.4f, 0.2f, 0.1f, 0.0f }; // Fractions for each platform type
+            platformCounts = Fraction(numberOfPlatforms - Random.Range(3, 8), fractions);//Number of platforms reduced
         }
-        //Spawn default platforms
-        for (int j = 0; j < platformType1Count; j++)
+        else if (diffScore >= 3 && diffScore <= 5)
         {
-            platform = PlacePlatform(GetRandomPosition(), 0); // Assuming 0 is the index for the first type of platform
+            float[] fractions = new float[] { 0.1f, 0.3f, 0.3f, 0.3f, 0.0f }; // Fractions for each platform type
+            platformCounts = Fraction(numberOfPlatforms - Random.Range(3, 8), fractions);//Number of platforms reduced
+        }
+
+
+        for (int i0 = 0; i0 < platformCounts[0]; i0++)//Spawn default platforms
+        {
+            platform = PlacePlatform(GetRandomPosition(), 0); 
             if (platform != null) // If a platform was successfully placed
             {
                 platforms.Add(platform);
-                platform.name = $"{platform.name} " + j;
+                platform.name = $"{platform.name} " + i0;
             }
         }
-        //Spawn fall 1 platforms
-        for (int k = 0; k < platformType2Count; k++)
+        for (int i1 = 0; i1 < platformCounts[1]; i1++)//Spawn slide platforms
         {
-            platform = PlacePlatform(GetRandomPosition(), 1); // Assuming 1 is the index for the second type of platform
+            platform = PlacePlatform(GetRandomPosition(), 1); 
             if (platform != null) // If a platform was successfully placed
             {
                 platforms.Add(platform);
-                platform.name = $"{platform.name} " + k;
+                platform.name = $"{platform.name} " + i1;
             }
         }
-        //Spawn slide platforms
-        for (int l = 0; l < platformType4Count; l++)
+        for (int i2 = 0; i2 < platformCounts[2]; i2++)//Spawn fall 1 type platforms
         {
-            platform = PlacePlatform(GetRandomPosition(), 3); // Assuming 1 is the index for the second type of platform
+            platform = PlacePlatform(GetRandomPosition(), 2); 
             if (platform != null) // If a platform was successfully placed
             {
                 platforms.Add(platform);
-                platform.name = $"{platform.name} " + l;
+                platform.name = $"{platform.name} " + i2;
+            }
+        }
+        for (int i3 = 0; i3 < platformCounts[3]; i3++)//Spawn fall 2 type platforms
+        {
+            platform = PlacePlatform(GetRandomPosition(), 3); 
+            if (platform != null) // If a platform was successfully placed
+            {
+                platforms.Add(platform);
+                platform.name = $"{platform.name} " + i3;
+            }
+        }
+        for (int i4 = 0; i4 < platformCounts[4]; i4++)//Spawn snow 
+        {
+            platform = PlacePlatform(GetRandomPosition(), 4); 
+            if (platform != null) // If a platform was successfully placed
+            {
+                platforms.Add(platform);
+                platform.name = $"{platform.name} " + i4;
             }
         }
         
         
     }
     
-
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //Spawn platforms always maximum on the distance of the grappling hook
     GameObject PlacePlatform(Vector2 initialPosition, int i)
     {
         int attempts = 0;
         while (attempts < MaxPlacementAttempts)
         {
-            if (!IsPositionCloseToOthers(initialPosition))
+            RaycastHit2D hitXleft = Physics2D.BoxCast(initialPosition, new Vector2(platformPrefab[i].transform.localScale.x, platformPrefab[i].transform.localScale.y + 0.01f), 0, Vector2.left);
+            RaycastHit2D hitXright = Physics2D.BoxCast(initialPosition, new Vector2(platformPrefab[i].transform.localScale.x, platformPrefab[i].transform.localScale.y + 0.01f), 0, Vector2.right);
+            // If the position is not too close to other platforms and no platforms on the left and right, then place the platform
+            if (hitXleft.collider == null && hitXright.collider == null && !IsPositionCloseToOthers(initialPosition))
             {
                 Debug.Log("Attempts made: " + attempts);
                 return Instantiate(platformPrefab[i], initialPosition, Quaternion.identity);

@@ -7,8 +7,10 @@ public class Bounds : MonoBehaviour
     float xPos;
     float yPos;
     public GrapplingRope grappleRope;
+    public GrapplingGun grappleGun;
     BoxCollider2D boxCollider;
     Camera mainCamera;
+    public float playerVelocity = 0.7f;
     void OnTriggerExit2D(Collider2D collider) 
     {
         if (collider.CompareTag("Player"))
@@ -22,49 +24,54 @@ public class Bounds : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         mainCamera = Camera.main;
     }
-    void Update() {
+    void Update() 
+    {
+        ScaleCameraBounds();
+    }
+
+    //Scale the camera's collider bounds to the screen size
+    public void ScaleCameraBounds()
+    {
         Vector2 topRightCorner = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, mainCamera.transform.position.z));
         Vector2 bottomLeftCorner = mainCamera.ScreenToWorldPoint(new Vector3(0, 0, mainCamera.transform.position.z));
         Debug.Log(topRightCorner);
         Debug.Log(bottomLeftCorner);
-        Vector2 size = (topRightCorner - bottomLeftCorner) * 2.15f;
+        Vector2 size = (topRightCorner - bottomLeftCorner) * 2.15f;//Change this value to change correctly the size of the camera's collider bounds
         boxCollider.size = size;
         Debug.Log(size);
     }
     public void InversePosition(Collider2D collider)
     {
-        //Vector2 planePosition = collider.transform.position;
         xPos = collider.transform.position.x;
         yPos = collider.transform.position.y;
-        // Vector3 screenPos = m_mainCamera.WorldToScreenPoint(transform.position); //Transform world position to the screen coordinates
-        // if (screenPos.x >= Screen.width) //If player moves the center of the screen - move the camera
-        // {
-        //     //Debug.Log("Works");
-        //     transform.position = new Vector2((xPos * 0) - (xPos + 0.5f), yPos);
-        // }
-        // else if (screenPos.x <= 0)
-        // {
-        //     Debug.Log("Works");
-        //     transform.position = new Vector2((xPos * 0) + xPos, yPos);
-        // }
-        if (xPos >= 0)
+      
+        //When player goes out of bounds, move them to the opposite side of the screen and reduce its velocity
+        if (xPos >= 0)//Right side of the screen
         {
-            grappleRope.enabled = false;
-            Debug.Log("Works");
+            grappleRope.enabled = false;//Disable the rope so it doesn't get stuck on the other side of the screen
+            grappleGun.m_springJoint2D.enabled = false;
+            //Debug.Log("Works");
+
             collider.transform.position = new Vector2((xPos * 0) - xPos, yPos);
             Rigidbody2D playerRigidbody = collider.GetComponent<Rigidbody2D>();
-            Debug.Log(playerRigidbody.velocity);
-            playerRigidbody.velocity = playerRigidbody.velocity *= 0.5f;
+
+            Debug.Log("Velocity: " + playerRigidbody.velocity);
+            playerRigidbody.velocity = playerRigidbody.velocity *= playerVelocity;
+            Debug.Log("Velocity reduced: " + playerRigidbody.velocity);
         }
-        else if (xPos < 0)
+        else if (xPos < 0)//Left side of the screen
         {
             grappleRope.enabled = false;
-            xPos = Mathf.Abs(xPos);
-            Debug.Log("Less than zero");
+            grappleGun.m_springJoint2D.enabled = false;
+            xPos = Mathf.Abs(xPos);//Make xPos positive
+
+            //Debug.Log("Less than zero");
             collider.transform.position = new Vector2((xPos * 0) + xPos, yPos);
             Rigidbody2D playerRigidbody = collider.GetComponent<Rigidbody2D>();
-            Debug.Log(playerRigidbody.velocity);
-            playerRigidbody.velocity = playerRigidbody.velocity *= 0.5f;
+
+            Debug.Log("Velocity: " + playerRigidbody.velocity);
+            playerRigidbody.velocity = playerRigidbody.velocity *= playerVelocity;
+            Debug.Log("Velocity reduced: " + playerRigidbody.velocity);
         }
     }
 }

@@ -31,7 +31,7 @@ public class FallPlatform1 : MonoBehaviour
         {
             Debug.Log("Fall script works");
             rb.bodyType = RigidbodyType2D.Dynamic;
-            //grapplingRope.enabled = false;
+            grapplingGun.m_springJoint2D.enabled = false;
             //m_springJoint2D.enabled = false;
         }
     }

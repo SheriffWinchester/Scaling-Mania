@@ -14,6 +14,17 @@ public class SlidePlatform : MonoBehaviour
         randomSide = Random.Range(0, 2);//Random.Range(0, 1) return only 0, so we need to use 2 instead of 1.
         rb = GetComponent<Rigidbody2D>();
         Debug.Log("Random side: " + randomSide);
+
+        // RaycastHit2D hitXaxis = Physics2D.BoxCast(transform.position, new Vector2(transform.localScale.x, transform.localScale.y + 0.01f), 0, Vector2.left);
+        // RaycastHit2D hitYaxis = Physics2D.BoxCast(transform.position, new Vector2(transform.localScale.x, transform.localScale.y + 0.01f), 0, Vector2.right);
+        // if (hitXaxis.collider != null)
+        // {
+        //     Debug.Log("Hit left");
+        // }
+        // if (hitYaxis.collider != null)
+        // {
+        //     Debug.Log("Hit right");
+        // }
     }
 
     // Update is called once per frame

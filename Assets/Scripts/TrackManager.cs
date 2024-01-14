@@ -25,13 +25,13 @@ public class TrackManager : MonoBehaviour
     }
     void ResetWorldPosition()
     {
-        if (player.position.y > 17 && needReset == false) //When reached the border - reset the world to the default position
+        if (player.position.y > 50 && needReset == false) //When reached the border - reset the world to the default position
         {
             needReset = true;
 
-            springJoint2D.enabled = false;
+            //springJoint2D.enabled = false;
             //Debug.Log(springJoint2D.enabled);
-            worldPosReset = new Vector2(-7f, -30f);
+            worldPosReset = new Vector2(-30, -30);
             this.transform.position = worldPosReset; 
             //Debug.Log("GrapHook: " + grapplingHook.hitPosition);
             hookPosReset = grapplingHook.hitPosition + worldPosReset; //Calculate position of the hook after the reset
@@ -42,7 +42,7 @@ public class TrackManager : MonoBehaviour
             //Debug.Log("Global: " + player.position);
             Debug.Log("Local: " + player.localPosition);
             //Debug.Log(transform.localPosition);
-            grapplingHook.hookResetEnabled = true; //Activate the hook's position accordingly after the reset
+            //grapplingHook.hookResetEnabled = true; //Activate the hook's position accordingly after the reset
         }
     }
     
