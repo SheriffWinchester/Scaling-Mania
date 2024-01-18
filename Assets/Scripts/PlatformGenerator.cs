@@ -15,10 +15,13 @@ public class PlatformGenerator : MonoBehaviour
      int platformType1Count, platformType2Count, 
         platformType3Count, platformType4Count, platformType5Count;
     int[] platformCounts; //0 - default, 1 - slide, 2 - fall1, 3 - fall2, 4 - snow
+    public GameObject player;
+    int diffScore = Singleton.instance.difficultyScore;
 
     private const int MaxPlacementAttempts = 10; // Maximum number of attempts to place a platform
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         InitializeBounds();
         Debug.Log("Fraction of platforms: " + fractionOfPlatforms);
         GeneratePlatforms();
@@ -44,10 +47,8 @@ public class PlatformGenerator : MonoBehaviour
         return platformCounts;
     }
     
-
     void GeneratePlatforms()
     {
-        int diffScore = Singleton.instance.difficultyScore;
 
         Debug.Log("Number of platforms: " + numberOfPlatforms);
         GameObject platform = null;
