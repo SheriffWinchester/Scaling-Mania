@@ -12,7 +12,7 @@ public class Snow : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        uiSprite = canvas.transform.Find("Snow").GetComponent<RectTransform>();
+        uiSprite = canvas.transform.Find("Image").GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
