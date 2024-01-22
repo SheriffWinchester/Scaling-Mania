@@ -170,9 +170,9 @@ public class GrapplingGun : MonoBehaviour
                 m_springJoint2D.autoConfigureDistance = true;
                 m_springJoint2D.frequency = 0;
             }
-            //Debug.Log("Grapple point");
+
             m_springJoint2D.connectedAnchor = grapplePoint;
-            //m_springJoint2D.connectedBody = grappleObject.GetComponent<Rigidbody2D>();
+
             m_springJoint2D.enabled = true;
         }
         else
@@ -182,7 +182,6 @@ public class GrapplingGun : MonoBehaviour
                 case LaunchType.Physics_Launch:
                     //Debug.Log("Grapple point");
                     m_springJoint2D.connectedAnchor = grapplePoint;
-                    //m_springJoint2D.connectedBody = grappleObject.GetComponent<Rigidbody2D>();
 
                     Vector2 distanceVector = firePoint.position - gunHolder.position;
 

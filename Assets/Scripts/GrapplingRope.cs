@@ -111,8 +111,8 @@ public class GrapplingRope : MonoBehaviour
             
                 //Vector2 diffVector = grapplingGun.grappleObject.transform.position - grapplingGun.grapplePoint; 
                 //grapplingGun.m_springJoint2D.connectedAnchor = grapplingGun.grappleObject.transform.TransformPoint(grapplingGun.grapplePoint);
-                Debug.Log("Position of the platform  " + grapplingGun.grappleObject.transform.position);
-                Debug.Log("Local of the platform  " + grapplingGun.grappleObject.transform.InverseTransformPoint(grapplingGun.grapplePoint));
+                // Debug.Log("Position of the platform  " + grapplingGun.grappleObject.transform.position);
+                // Debug.Log("Local of the platform  " + grapplingGun.grappleObject.transform.InverseTransformPoint(grapplingGun.grapplePoint));
             }
             if (waveSize > 0)
             {

@@ -15,7 +15,7 @@ public class LevelGenerator : MonoBehaviour
         player = GameObject.Find("Player");
 
         //Spawn first three chunks, append to a list.
-        var startChunk = Instantiate(prefabLevelChunk, new Vector3(0, 0, 0), Quaternion.identity);
+        var startChunk = Instantiate(prefabLevelChunk, new Vector3(0, 5.2f, 0), Quaternion.identity);//Center of the game shifted a bit, that the player could be on the 0 coordinates
         var secondChunk = Instantiate(prefabLevelChunk, new Vector3(startChunk.transform.position.x, startChunk.transform.position.y + 10f, startChunk.transform.position.z), Quaternion.identity);
         var thirdChunk = Instantiate(prefabLevelChunk, new Vector3(secondChunk.transform.position.x, secondChunk.transform.position.y + 10f, secondChunk.transform.position.z), Quaternion.identity);
         Debug.Log(startChunk.GetComponent<BoxCollider2D>().bounds.size);

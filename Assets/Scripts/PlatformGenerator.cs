@@ -17,11 +17,13 @@ public class PlatformGenerator : MonoBehaviour
     int[] platformCounts; //0 - default, 1 - slide, 2 - fall1, 3 - fall2, 4 - snow
     public GameObject player;
     int diffScore = Singleton.instance.difficultyScore;
+    public GameObject trackManager;
 
     private const int MaxPlacementAttempts = 10; // Maximum number of attempts to place a platform
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        trackManager = GameObject.Find("TrackManager");
         InitializeBounds();
         Debug.Log("Fraction of platforms: " + fractionOfPlatforms);
         GeneratePlatforms();
@@ -83,6 +85,7 @@ public class PlatformGenerator : MonoBehaviour
             {
                 platforms.Add(platform);
                 platform.name = $"{platform.name} " + i0;
+                platform.transform.SetParent(trackManager.transform);
             }
         }
         for (int i1 = 0; i1 < platformCounts[1]; i1++)//Spawn slide platforms
@@ -92,6 +95,7 @@ public class PlatformGenerator : MonoBehaviour
             {
                 platforms.Add(platform);
                 platform.name = $"{platform.name} " + i1;
+                platform.transform.SetParent(trackManager.transform);
             }
         }
         for (int i2 = 0; i2 < platformCounts[2]; i2++)//Spawn fall 1 type platforms
@@ -101,6 +105,7 @@ public class PlatformGenerator : MonoBehaviour
             {
                 platforms.Add(platform);
                 platform.name = $"{platform.name} " + i2;
+                platform.transform.SetParent(trackManager.transform);
             }
         }
         for (int i3 = 0; i3 < platformCounts[3]; i3++)//Spawn fall 2 type platforms
@@ -110,6 +115,7 @@ public class PlatformGenerator : MonoBehaviour
             {
                 platforms.Add(platform);
                 platform.name = $"{platform.name} " + i3;
+                platform.transform.SetParent(trackManager.transform);
             }
         }
         for (int i4 = 0; i4 < platformCounts[4]; i4++)//Spawn snow 
@@ -119,6 +125,7 @@ public class PlatformGenerator : MonoBehaviour
             {
                 platforms.Add(platform);
                 platform.name = $"{platform.name} " + i4;
+                platform.transform.SetParent(trackManager.transform);
             }
         }
         
