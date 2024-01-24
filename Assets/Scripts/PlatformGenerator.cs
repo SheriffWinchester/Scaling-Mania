@@ -71,7 +71,7 @@ public class PlatformGenerator : MonoBehaviour
             float[] fractions = new float[] { 0.2f, 0.4f, 0.2f, 0.1f, 0.0f }; // Fractions for each platform type
             platformCounts = Fraction(numberOfPlatforms - Random.Range(3, 8), fractions);//Number of platforms reduced
         }
-        else if (diffScore >= 3 && diffScore <= 5)
+        else if (diffScore >= 3)
         {
             float[] fractions = new float[] { 0.1f, 0.3f, 0.3f, 0.3f, 0.0f }; // Fractions for each platform type
             platformCounts = Fraction(numberOfPlatforms - Random.Range(3, 8), fractions);//Number of platforms reduced

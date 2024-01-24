@@ -26,7 +26,7 @@ public class Bounds : MonoBehaviour
     }
     void Update() 
     {
-        ScaleCameraBounds();
+        //ScaleCameraBounds();
     }
 
     //Scale the camera's collider bounds to the screen size

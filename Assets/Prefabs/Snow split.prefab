@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: -940604455777374432}
   - component: {fileID: -7971797105521060756}
   - component: {fileID: -2954637544129414853}
+  - component: {fileID: 3844021233328936378}
   m_Layer: 12
-  m_Name: Snow
+  m_Name: Snow split
   m_TagString: Grappable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 8051547228620932028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.1, y: 0.97, z: 0}
-  m_LocalScale: {x: 1.5284414, y: 0.0797775, z: 0.42548}
+  m_LocalScale: {x: 0.7, y: 0.0797775, z: 0.42548}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -148,7 +149,7 @@ MonoBehaviour:
   uiSprite: {fileID: 0}
   canvas: {fileID: 0}
   player: {fileID: 0}
-  snowPrefab: {fileID: 8051547228620932028, guid: 77a6089d892dc7648b67639e603a19de, type: 3}
+  snowPrefab: {fileID: 0}
   grapplingGun: {fileID: 0}
   grappleRope: {fileID: 0}
 --- !u!50 &-2954637544129414853
@@ -172,3 +173,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3844021233328936378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8051547228620932028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c3f2435e61ac849b2ab6fefeab89d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

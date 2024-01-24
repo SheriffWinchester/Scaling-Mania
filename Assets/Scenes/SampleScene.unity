@@ -1405,67 +1405,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1001 &666937671
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.98
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.62
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4740675142119115410, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8051547228620932028, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_Name
-      value: Default Platform (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8051547228620932028, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f6ad126e47fc6c24b8ebec84fa8ca52c, type: 3}
 --- !u!1 &692628460
 GameObject:
   m_ObjectHideFlags: 0
@@ -1836,7 +1775,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792434020}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.01, y: -4.64, z: 0.36096415}
+  m_LocalPosition: {x: 0.01, y: -0.88, z: 0.36096415}
   m_LocalScale: {x: 0.21017902, y: 0.21017902, z: 0.21017902}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2138,6 +2077,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc94fdc6d8db024d80d90dee331d301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  grapplingGun: {fileID: 0}
+  grappleRope: {fileID: 0}
 --- !u!1 &895285658
 GameObject:
   m_ObjectHideFlags: 0
@@ -2430,6 +2372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -2465,7 +2408,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1118158752
 GameObject:
@@ -2502,7 +2445,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -24, y: -1242}
+  m_AnchoredPosition: {x: -36, y: 334}
   m_SizeDelta: {x: 30, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1118158754
@@ -3398,7 +3341,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1

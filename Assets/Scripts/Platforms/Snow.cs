@@ -8,6 +8,7 @@ public class Snow : MonoBehaviour
     public RectTransform uiSprite;
     public Canvas canvas;
     public GameObject player;
+    public GameObject snowPrefab;
     public GrapplingGun grapplingGun;
     public GrapplingRope grappleRope;
     int playerLayer;
@@ -33,8 +34,11 @@ public class Snow : MonoBehaviour
             Debug.Log("Viewport position: " + viewportPosition);
             uiSprite.gameObject.SetActive(true);
             float yPosition = Screen.height * 0.3f; // 80% of the screen height to place the UI element
-            Vector2 position = Camera.main.WorldToScreenPoint(transform.position);
+            Vector2 position = Camera.main.WorldToViewportPoint(transform.position);
             position = canvas.transform.InverseTransformPoint(position);
+
+            //position.x *= Screen.width;
+            // position.y = yPosition;
 
             //uiSprite.position = new Vector2(position.x, yPosition);
             uiSprite.anchoredPosition = new Vector2(position.x, yPosition);
@@ -47,16 +51,6 @@ public class Snow : MonoBehaviour
         if (viewportPosition.y < 0)//If out of the lower bound, destroy the object
         {
             Destroy(gameObject);
-        }
-
-        if (Singleton.instance.snowDisabledCollision == true) //If the player collided with the snow - grapple to something and it will enable the collision again
-        {
-            if (grapplingGun.m_springJoint2D.enabled == true)
-            {
-                Debug.Log("Script enabled: " + Singleton.instance.snowDisabledCollision);
-                Physics2D.IgnoreLayerCollision(playerLayer, grappableLayer, false);
-                Singleton.instance.snowDisabledCollision = false;
-            }
         }
     }
     //When the player collides with the snow, disable the collision between the player and the grappable layer
@@ -76,8 +70,21 @@ public class Snow : MonoBehaviour
             // Get the grappable layer
             grappableLayer  = LayerMask.NameToLayer("Grappable");
             // Disable the collision between the player's layer and the grappable layer
-            Physics2D.IgnoreLayerCollision(playerLayer, grappableLayer, true);
+            player.GetComponent<BoxCollider2D>().isTrigger = true;
             Singleton.instance.snowDisabledCollision = true;
+
+            Vector2 contactPoint = collision.GetContact(0).point;
+
+            // Create two new snow objects
+            GameObject snow1 = Instantiate(snowPrefab, transform.position, Quaternion.identity);
+            GameObject snow2 = Instantiate(snowPrefab, transform.position, Quaternion.identity);
+
+            // Set the positions of the new snow objects to simulate a split
+            snow1.transform.position = new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z);
+            snow2.transform.position = new Vector3(transform.position.x + 0.5f, transform.position.y, transform.position.z);
+
+            // Destroy the original snow object
+            Destroy(gameObject);
         }
     }
     // IEnumerator DestroySnowAfterDelay(float delay)
