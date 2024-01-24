@@ -37,6 +37,8 @@ public class PlayerTrack : MonoBehaviour
             Debug.Log("Score: " + Singleton.instance.mainScore);
         }
         Debug.Log("Script enabled: " + Singleton.instance.snowDisabledCollision);
+
+        //Resume collision
         if (Singleton.instance.snowDisabledCollision == true) //If the player collided with the snow - grapple to something and it will enable the collision again
         {
             if (grapplingGun.m_springJoint2D.enabled == true)
@@ -47,5 +49,10 @@ public class PlayerTrack : MonoBehaviour
                 Singleton.instance.snowDisabledCollision = false;
             }
         }
+    }
+
+    void ResumeCollision()
+    {
+        
     }
 }

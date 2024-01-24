@@ -8,25 +8,30 @@ public class PlayerMovement : MonoBehaviour
     Vector2 move;
     GameObject _camera;
     Camera MainCamera;
+    public GrapplingGun grapplingGun;
 
-    public float movementSpeed = 5f;
+    public float movementSpeed = 150f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        grapplingGun = GetComponent<GrapplingGun>();
     }
 
-    void FixedUpdate()
-    {
-        
-    }
     void Update()
     {   
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        Vector2 playerPosition = new Vector2(horizontal, vertical);
-        rb.MovePosition(playerPosition * movementSpeed * Time.deltaTime);
-        // rb.velocity = new Vector2(move.x * movementSpeed, move.y * movementSpeed);
-        // move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        //HookSwing();
+        if (grapplingGun.m_springJoint2D.enabled)
+        {
+            // Get the horizontal input (left or right)
+            float horizontalInput = Input.GetAxis("Horizontal");
+
+            // Apply a force to the Rigidbody2D in the direction of the input
+            rb.AddForce(new Vector2((horizontalInput * movementSpeed) * Time.deltaTime, 0));
+        }
+    }
+    void HookSwing()
+    {
+        
     }
 }

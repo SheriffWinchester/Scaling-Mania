@@ -30,6 +30,7 @@ public class GrapplingGun : MonoBehaviour
     [Header("Distance:")]
     [SerializeField] private bool hasMaxDistance = false;
     [SerializeField] private float maxDistnace = 20;
+    public GameObject cursor;
 
     private enum LaunchType
     {
@@ -66,6 +67,7 @@ public class GrapplingGun : MonoBehaviour
     private void Update()
     {
         //Debug.Log("Camera: " + m_camera.WorldToViewportPoint(transform.position));
+        DrawCursor();
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("Gun script 1");
@@ -114,6 +116,7 @@ public class GrapplingGun : MonoBehaviour
             RotateGun(mousePos, true);
         }
         Debug.Log("Gun script 5");
+        
     }
 
     void RotateGun(Vector3 lookPoint, bool allowRotationOverTime)
@@ -150,6 +153,14 @@ public class GrapplingGun : MonoBehaviour
                     grappleRope.enabled = true;
                     Debug.Log(grappleRope.enabled);
                 }
+            }
+            if (_hit == null)
+            {
+                grapplePoint = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position;
+                Debug.Log("Point in the air: " + grapplePoint);
+                grappleObject = null;
+                grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
+                grappleRope.enabled = true;
             }
         }
     }
@@ -214,4 +225,30 @@ public class GrapplingGun : MonoBehaviour
         }
     }
 
+    private void DrawCursor()
+    {
+         // Get the mouse position in world coordinates
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = gunPivot.position.z;
+        // Calculate the direction from the player to the mouse
+        Vector3 direction = mousePosition - gunPivot.position;
+
+         // If the mouse is out of max distance, switch off the cursor
+        if (direction.magnitude > maxDistnace)
+        {
+            cursor.SetActive(false);
+            direction = direction.normalized * maxDistnace;
+        }
+        else
+        {
+            // If the mouse is within max distance, switch on the cursor and update its position
+            cursor.SetActive(true);
+
+            // Limit the distance of the cursor to maxDistance
+            direction = mousePosition - gunPivot.position;
+
+            // Update the position of the cursor
+            cursor.transform.position = gunPivot.position + direction;
+        }
+    }
 }

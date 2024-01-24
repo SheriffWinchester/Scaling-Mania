@@ -33,9 +33,10 @@ public class Snow : MonoBehaviour
         {
             Debug.Log("Viewport position: " + viewportPosition);
             uiSprite.gameObject.SetActive(true);
-            float yPosition = Screen.height * 0.3f; // 80% of the screen height to place the UI element
+            float yPosition = Screen.height * 0.6f; // 80% of the screen height to place the UI element
             Vector2 position = Camera.main.WorldToViewportPoint(transform.position);
-            position = canvas.transform.InverseTransformPoint(position);
+            position.x = (position.x - 0.5f) * Screen.width;
+            
 
             //position.x *= Screen.width;
             // position.y = yPosition;
@@ -72,8 +73,6 @@ public class Snow : MonoBehaviour
             // Disable the collision between the player's layer and the grappable layer
             player.GetComponent<BoxCollider2D>().isTrigger = true;
             Singleton.instance.snowDisabledCollision = true;
-
-            Vector2 contactPoint = collision.GetContact(0).point;
 
             // Create two new snow objects
             GameObject snow1 = Instantiate(snowPrefab, transform.position, Quaternion.identity);

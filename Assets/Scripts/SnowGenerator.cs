@@ -39,7 +39,7 @@ public class SnowGenerator : MonoBehaviour
         for (int i = 0; i < spawnCount; i++)
         {
             // Generate a random X position inside the viewport
-            float randomX = Random.Range(0f, 1f);
+            float randomX = Random.Range(0.1f, 0.9f);
 
             // Set the Y position to be outside of the viewport
             float yPosition = 2f; // Adjust this value as needed
