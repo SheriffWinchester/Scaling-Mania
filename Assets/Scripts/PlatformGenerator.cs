@@ -69,7 +69,7 @@ public class PlatformGenerator : MonoBehaviour
         else if (diffScore >= 1 && diffScore < 3)
         {
             float[] fractions = new float[] { 0.2f, 0.4f, 0.2f, 0.1f, 0.0f }; // Fractions for each platform type
-            platformCounts = Fraction(numberOfPlatforms - Random.Range(3, 8), fractions);//Number of platforms reduced
+            platformCounts = Fraction(numberOfPlatforms - Random.Range(3, 5), fractions);//Number of platforms reduced
         }
         else if (diffScore >= 3)
         {

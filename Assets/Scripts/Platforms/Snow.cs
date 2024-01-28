@@ -17,11 +17,9 @@ public class Snow : MonoBehaviour
     {
         player = GameObject.Find("Player");
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        uiSprite = canvas.transform.Find("Image").GetComponent<RectTransform>();
+        uiSprite = canvas.transform.Find("Interface/Exclamation Mark").GetComponent<RectTransform>();
         grapplingGun = player.GetComponent<GrapplingGun>();
         grappleRope = player.GetComponent<GrapplingRope>();
-
-        // StartCoroutine(DestroySnowAfterDelay(10f));
     }
     
 
@@ -37,11 +35,6 @@ public class Snow : MonoBehaviour
             Vector2 position = Camera.main.WorldToViewportPoint(transform.position);
             position.x = (position.x - 0.5f) * Screen.width;
             
-
-            //position.x *= Screen.width;
-            // position.y = yPosition;
-
-            //uiSprite.position = new Vector2(position.x, yPosition);
             uiSprite.anchoredPosition = new Vector2(position.x, yPosition);
             Debug.Log("Screen height: " + Screen.height);
         } 
@@ -61,11 +54,10 @@ public class Snow : MonoBehaviour
         if (collision.gameObject.name == "Player")
         {
             Debug.Log("Player collided with snow");
-            
-            //grappleRope = collision.gameObject.GetComponent<GrapplingRope>();
+
             grappleRope.enabled = false;
-            //grapplingGun = collision.gameObject.GetComponent<GrapplingGun>();
             grapplingGun.m_springJoint2D.enabled = false;
+
             // Get the player's layer
             playerLayer = player.layer;
             // Get the grappable layer
@@ -86,12 +78,4 @@ public class Snow : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    // IEnumerator DestroySnowAfterDelay(float delay)
-    // {
-    //     // Wait for the specified delay
-    //     yield return new WaitForSeconds(delay);
-
-    //     // Destroy the snow
-    //     Destroy(gameObject);
-    // }
 }
