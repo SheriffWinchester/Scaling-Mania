@@ -152,6 +152,7 @@ public class GrapplingGun : MonoBehaviour
                     grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
                     grappleRope.enabled = true;
                     Debug.Log(grappleRope.enabled);
+                    Debug.DrawRay(firePoint.position, distanceVector.normalized * maxDistnace, Color.red, 2f);
                 }
             }
             if (_hit == null)
