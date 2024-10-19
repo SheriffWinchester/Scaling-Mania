@@ -579,6 +579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad5eeb0b1f0cfa44b97ca3812085161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   hookPosReset: {x: 0, y: 0}
 --- !u!4 &355962548
 Transform:
@@ -1933,6 +1934,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grapplingGun: {fileID: 0}
+  jumpForce: 1
+  jumpDelay: 5
   movementSpeed: 5
 --- !u!114 &792434028
 MonoBehaviour:
@@ -2233,6 +2236,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grapplingGun: {fileID: 0}
+  jumpForce: 5
+  jumpDelay: 3
   movementSpeed: 350
 --- !u!1 &895285658
 GameObject:
