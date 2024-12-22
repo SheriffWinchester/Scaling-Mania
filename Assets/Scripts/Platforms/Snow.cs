@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Snow : MonoBehaviour
 {
-    public RectTransform uiSprite;
+    public RectTransform uiSprite1, uiSprite2, uiSprite3, uiSprite4, uiSprite5;
     public Canvas canvas;
     public GameObject player;
     public GameObject snowPrefab;
@@ -13,11 +13,16 @@ public class Snow : MonoBehaviour
     public GrapplingRope grappleRope;
     int playerLayer;
     int grappableLayer;
+    string snowNumber;
     void Start()
     {
         player = GameObject.Find("Player");
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        uiSprite = canvas.transform.Find("Interface/Exclamation Mark").GetComponent<RectTransform>();
+        uiSprite1 = canvas.transform.Find("Interface/Exclamation Mark 1").GetComponent<RectTransform>();
+        uiSprite2 = canvas.transform.Find("Interface/Exclamation Mark 2").GetComponent<RectTransform>();
+        uiSprite3 = canvas.transform.Find("Interface/Exclamation Mark 3").GetComponent<RectTransform>();
+        uiSprite4 = canvas.transform.Find("Interface/Exclamation Mark 4").GetComponent<RectTransform>();
+        uiSprite5 = canvas.transform.Find("Interface/Exclamation Mark 5").GetComponent<RectTransform>();
         grapplingGun = player.GetComponent<GrapplingGun>();
         grappleRope = player.GetComponent<GrapplingRope>();
     }
@@ -30,17 +35,50 @@ public class Snow : MonoBehaviour
         if (viewportPosition.y > 1) //Check only Y axis, it is sufficient. > 1 is out of the upper bound
         {
             Debug.Log("Viewport position: " + viewportPosition);
-            uiSprite.gameObject.SetActive(true);
-            float yPosition = Screen.height * 0.6f; // 80% of the screen height to place the UI element
+            snowNumber = gameObject.name.Substring(gameObject.name.Length - 1);
+
+            float yPosition = Screen.height * 0.3f; // 80% of the screen height to place the UI element
             Vector2 position = Camera.main.WorldToViewportPoint(transform.position);
             position.x = (position.x - 0.5f) * Screen.width;
             
-            uiSprite.anchoredPosition = new Vector2(position.x, yPosition);
+                    // Check the snow number and activate the appropriate uiSprite
+            switch (snowNumber)
+            {
+                case "1":
+                    uiSprite1.gameObject.SetActive(true);
+                    uiSprite1.anchoredPosition = new Vector2(position.x, yPosition);
+                    break;
+                case "2":
+                    uiSprite2.gameObject.SetActive(true);
+                    uiSprite2.anchoredPosition = new Vector2(position.x, yPosition);
+                    break;
+                case "3":
+                    uiSprite3.gameObject.SetActive(true);
+                    uiSprite3.anchoredPosition = new Vector2(position.x, yPosition);
+                    break;
+                case "4":
+                    uiSprite4.gameObject.SetActive(true);
+                    uiSprite4.anchoredPosition = new Vector2(position.x, yPosition);
+                    break;
+                case "5":
+                    uiSprite5.gameObject.SetActive(true);
+                    uiSprite5.anchoredPosition = new Vector2(position.x, yPosition);
+                    break;
+                default:
+                    Debug.LogWarning("Unknown snow number: " + snowNumber);
+                    break;
+            }
+            //uiSprite1.anchoredPosition = new Vector2(position.x, yPosition);
             Debug.Log("Screen height: " + Screen.height);
         } 
         else
         {
-            uiSprite.gameObject.SetActive(false);
+            // Deactivate all uiSprites if the snow is not out of the upper bound
+            uiSprite1.gameObject.SetActive(false);
+            uiSprite2.gameObject.SetActive(false);
+            uiSprite3.gameObject.SetActive(false);
+            uiSprite4.gameObject.SetActive(false);
+            uiSprite5.gameObject.SetActive(false);
         }
         if (viewportPosition.y < 0)//If out of the lower bound, destroy the object
         {
@@ -76,6 +114,36 @@ public class Snow : MonoBehaviour
 
             // Destroy the original snow object
             Destroy(gameObject);
+        }
+    }
+    void AssignExclamationMark(Vector2 position, float yPosition)
+    {
+        // Check the snow number and activate the appropriate uiSprite
+        switch (snowNumber)
+        {
+            case "1":
+                uiSprite1.gameObject.SetActive(true);
+                uiSprite1.anchoredPosition = new Vector2(position.x, yPosition);
+                break;
+            case "2":
+                uiSprite2.gameObject.SetActive(true);
+                uiSprite2.anchoredPosition = new Vector2(position.x, yPosition);
+                break;
+            case "3":
+                uiSprite3.gameObject.SetActive(true);
+                uiSprite3.anchoredPosition = new Vector2(position.x, yPosition);
+                break;
+            case "4":
+                uiSprite4.gameObject.SetActive(true);
+                uiSprite4.anchoredPosition = new Vector2(position.x, yPosition);
+                break;
+            case "5":
+                uiSprite5.gameObject.SetActive(true);
+                uiSprite5.anchoredPosition = new Vector2(position.x, yPosition);
+                break;
+            default:
+                Debug.LogWarning("Unknown snow number: " + snowNumber);
+                break;
         }
     }
 }

@@ -12,9 +12,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player");
+        //player = GameObject.Find("Player");
         //Screen.SetResolution(1440, 3088, false);
-        playerLayer = player.layer;
+        //playerLayer = player.layer;
         // Get the grappable layer
         grappableLayer  = LayerMask.NameToLayer("Grappable");
     }
@@ -22,11 +22,22 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Continuously search for the player until it is found
+        if (player == null)
+        {
+            player = GameObject.Find("Player");
+            if (player != null)
+            {
+                playerLayer = player.layer;
+                Debug.Log("Player found and layers set");
+            }
+        }
         // Check if the player's Y position is less than 0 in viewport coordinates
         if (player != null && Camera.main.WorldToViewportPoint(player.transform.position).y < 0)
         {
             //Physics2D.IgnoreLayerCollision(playerLayer, grappableLayer, false);//Enable collision of the player if snow collided with the player
             // Reload the current scene to restart the game
+            Debug.Log("Restart the scene");
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }

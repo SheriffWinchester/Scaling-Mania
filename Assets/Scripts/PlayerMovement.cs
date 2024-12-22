@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     GameObject _camera;
     Camera MainCamera;
     public GrapplingGun grapplingGun;
-    public float jumpForce = 1f;
+    public float jumpForce = 5f;
     public float jumpDelay = 3f;
     private float jumpTimer = 0f;
 

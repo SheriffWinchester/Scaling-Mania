@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -2954637544129414853}
   m_Layer: 12
   m_Name: Snow
-  m_TagString: Grappable
+  m_TagString: Snow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

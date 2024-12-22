@@ -5,11 +5,12 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
 
-    [SerializeField] List<GameObject> chunks = new List<GameObject>();
+    public List<GameObject> chunks = new List<GameObject>();
     public GameObject prefabLevelChunk;
     GameObject startChunk;
     GameObject player;
     bool startPlatformsSpawn = false;
+    GameObject chunk;
     void Start()
     { 
         player = GameObject.Find("Player");
@@ -46,10 +47,10 @@ public class LevelGenerator : MonoBehaviour
                 Singleton.instance.spawnChunk = true;
                 Debug.Log("Works");
 
-                var chunk = Instantiate(prefabLevelChunk, new Vector3(chunks[2].transform.position.x, chunks[2].transform.position.y + 10f, chunks[2].transform.position.z), Quaternion.identity);
-                
+                chunk = Instantiate(prefabLevelChunk, new Vector3(chunks[2].transform.position.x, chunks[2].transform.position.y + 10f, chunks[2].transform.position.z), Quaternion.identity);
+                Debug.Log("Chunks: " + chunks.Count);
                 chunks.Add(chunk);
-                Destroy(chunks[0]);
+                Destroy(chunks[0]); //!!!!!!!!!!!!TODO!!!!!!!!!!!!!! Probably to disable this chunk instead of destroying it, to avoid memory leaks.
                 chunks.RemoveAt(0);
 
                 Singleton.instance.difficultyScore++; //Increase difficulty score of the game. After 3 it begins to spawn other platforms and enemies.
