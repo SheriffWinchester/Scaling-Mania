@@ -10,11 +10,24 @@ public class MenuButton : MonoBehaviour
     public Camera mainCamera; // Reference to the main camera
     public float moveDuration = 2f; // Duration of the camera move
 
+    private GameObject menuPlayer;
+    private GrapplingGun grapplingGun;
+    private Vector2 grapplePoint;
+
     public void PlayButton()
     {
+        menuPlayer = GameObject.Find("MenuPlayer");
+        grapplingGun = menuPlayer.GetComponent<GrapplingGun>();
+        
+        // Set the grapple point to (0, 1)
+        //Vector3 newGrapplePoint = new Vector3(0, 1, 0);
+        //grapplingGun.distanceVector = newGrapplePoint - grapplingGun.gunPivot.position;
+        //grapplingGun.SetGrapplePoint();
+
         trackManager.SetActive(true);
         //Singleton.instance.gameStartedMoveCamera = true;
         Debug.Log("Play Button Pressed");
+
         mainCamera.transform.DOMove(new Vector3(0, 4.6f, -10f), 4).OnComplete(() =>
         {
             Debug.Log("Camera moved to target position");

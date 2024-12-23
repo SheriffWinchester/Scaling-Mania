@@ -55,9 +55,9 @@ public class Bounds : MonoBehaviour
             collider.transform.position = new Vector2((xPos * 0) - xPos, yPos);
             Rigidbody2D playerRigidbody = collider.GetComponent<Rigidbody2D>();
 
-            Debug.Log("Velocity: " + playerRigidbody.velocity);
-            playerRigidbody.velocity = playerRigidbody.velocity *= playerVelocity;
-            Debug.Log("Velocity reduced: " + playerRigidbody.velocity);
+            Debug.Log("Velocity: " + playerRigidbody.linearVelocity);
+            playerRigidbody.linearVelocity = playerRigidbody.linearVelocity *= playerVelocity;
+            Debug.Log("Velocity reduced: " + playerRigidbody.linearVelocity);
         }
         else if (xPos < 0)//Left side of the screen
         {
@@ -69,9 +69,9 @@ public class Bounds : MonoBehaviour
             collider.transform.position = new Vector2((xPos * 0) + xPos, yPos);
             Rigidbody2D playerRigidbody = collider.GetComponent<Rigidbody2D>();
 
-            Debug.Log("Velocity: " + playerRigidbody.velocity);
-            playerRigidbody.velocity = playerRigidbody.velocity *= playerVelocity;
-            Debug.Log("Velocity reduced: " + playerRigidbody.velocity);
+            Debug.Log("Velocity: " + playerRigidbody.linearVelocity);
+            playerRigidbody.linearVelocity = playerRigidbody.linearVelocity *= playerVelocity;
+            Debug.Log("Velocity reduced: " + playerRigidbody.linearVelocity);
         }
     }
 }

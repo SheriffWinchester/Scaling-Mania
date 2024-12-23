@@ -31,6 +31,7 @@ public class GrapplingGun : MonoBehaviour
     [SerializeField] private bool hasMaxDistance = false;
     [SerializeField] private float maxDistnace = 20;
     public GameObject cursor;
+    public bool mousePosActive = true;
 
     private enum LaunchType
     {
@@ -53,6 +54,7 @@ public class GrapplingGun : MonoBehaviour
     [HideInInspector] public Vector2 grappleDistanceVector;
     [HideInInspector] public RaycastHit2D _hit;
     public GameObject childObject;
+    public Vector2 distanceVector;
 
     int layerMaskGrappable = 1 << 8;
 
@@ -113,7 +115,10 @@ public class GrapplingGun : MonoBehaviour
         else
         {
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
-            RotateGun(mousePos, true);
+            if (mousePosActive)
+            {
+                RotateGun(mousePos, true);
+            }
         }
         Debug.Log("Gun script 5");
         
@@ -135,9 +140,10 @@ public class GrapplingGun : MonoBehaviour
         }
     }
 
-    void SetGrapplePoint()
+    public void SetGrapplePoint()
     {
-        Vector2 distanceVector = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position;
+        Debug.Log("Set Grapple Point");
+        distanceVector = new Vector3(0, 1, 0) - gunPivot.position;
         if (Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable))
         {
             _hit = Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable);
@@ -203,7 +209,7 @@ public class GrapplingGun : MonoBehaviour
                     break;
                 case LaunchType.Transform_Launch:
                     m_rigidbody.gravityScale = 0;
-                    m_rigidbody.velocity = Vector2.zero;
+                    m_rigidbody.linearVelocity = Vector2.zero;
                     break;
             }
         }

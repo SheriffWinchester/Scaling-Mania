@@ -49,11 +49,11 @@ public class SlidePlatform : MonoBehaviour
     {
         if (randomSide == 0) //Slide left
         {
-            rb.velocity = new Vector2(-speed * coefSpeed, 0);
+            rb.linearVelocity = new Vector2(-speed * coefSpeed, 0);
         }
         else //Slide right
         {
-            rb.velocity = new Vector2(speed * coefSpeed, 0);
+            rb.linearVelocity = new Vector2(speed * coefSpeed, 0);
         }
     }
     IEnumerator ChangeDirectionWithDelay(float delay)
