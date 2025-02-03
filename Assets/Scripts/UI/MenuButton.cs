@@ -22,25 +22,34 @@ public class MenuButton : MonoBehaviour
         // Set the grapple point to (0, 1)
         //Vector3 newGrapplePoint = new Vector3(0, 1, 0);
         //grapplingGun.distanceVector = newGrapplePoint - grapplingGun.gunPivot.position;
-        //grapplingGun.SetGrapplePoint();
+        menuPlayer.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = false;
+        menuPlayer.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+        Singleton.instance.playerObjectMenuReady = true;
+        //grapplingGun.distanceVector = new Vector3(0, 1, 0);
+        grapplingGun.SetGrapplePoint();
 
         trackManager.SetActive(true);
         //Singleton.instance.gameStartedMoveCamera = true;
         Debug.Log("Play Button Pressed");
 
-        mainCamera.transform.DOMove(new Vector3(0, 4.6f, -10f), 4).OnComplete(() =>
+        Invoke("MoveCamera", 1f);
+        
+        //StartCoroutine(MoveCamera1(new Vector3(0, 4.6f, -10f), moveDuration));
+    }
+
+    void MoveCamera()
+    {
+        mainCamera.transform.DOMove(new Vector3(0, 4.6f, -10f), 2).OnComplete(() =>
         {
             Debug.Log("Camera moved to target position");
             Singleton.instance.gameStarted = true;
             canvas.SetActive(true);
             canvas2.SetActive(false);
-            Debug.Log("gameStartedMoveCamera set to true");
         });
-        
-        //StartCoroutine(MoveCamera(new Vector3(0, 4.6f, -10f), moveDuration));
-    }
+        menuPlayer.SetActive(false);
+    }   
 
-    private IEnumerator MoveCamera(Vector3 targetPosition, float duration)
+    private IEnumerator MoveCamera1(Vector3 targetPosition, float duration)
     {
         Vector3 startPosition = mainCamera.transform.position;
         float elapsedTime = 0f;

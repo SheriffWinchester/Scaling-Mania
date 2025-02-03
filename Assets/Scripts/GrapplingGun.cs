@@ -32,6 +32,7 @@ public class GrapplingGun : MonoBehaviour
     [SerializeField] private float maxDistnace = 20;
     public GameObject cursor;
     public bool mousePosActive = true;
+    public bool isPlayer = true;
 
     private enum LaunchType
     {
@@ -70,7 +71,7 @@ public class GrapplingGun : MonoBehaviour
     {
         //Debug.Log("Camera: " + m_camera.WorldToViewportPoint(transform.position));
         DrawCursor();
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
         {
             Debug.Log("Gun script 1");
             SetGrapplePoint();
@@ -80,6 +81,18 @@ public class GrapplingGun : MonoBehaviour
             // Set the parent of the childObject to the grappleObject
             childObject.transform.SetParent(grappleObject.transform, true);
             //grapplePoint = grappleObject.transform.InverseTransformPoint(grapplePoint);
+        }
+        else if (!isPlayer && Singleton.instance.playerObjectMenuReady)
+        {
+            Debug.Log("#343");
+            SetGrapplePoint();
+            // Set the position of the childObject to the grapplePoint
+            childObject.transform.position = grapplePoint;
+
+            // Set the parent of the childObject to the grappleObject
+            childObject.transform.SetParent(grappleObject.transform, true);
+
+            Singleton.instance.playerObjectMenuReady = false;
         }
         else if (Input.GetKey(KeyCode.Mouse0))
         {
@@ -143,7 +156,14 @@ public class GrapplingGun : MonoBehaviour
     public void SetGrapplePoint()
     {
         Debug.Log("Set Grapple Point");
-        distanceVector = new Vector3(0, 1, 0) - gunPivot.position;
+        if (Singleton.instance.playerObjectMenuReady)
+        {
+            distanceVector = new Vector3(0, 1, 0) - gunPivot.position;
+        }
+        else
+        {
+            distanceVector = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position;
+        }
         if (Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable))
         {
             _hit = Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable);
