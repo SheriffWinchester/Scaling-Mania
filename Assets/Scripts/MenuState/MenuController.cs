@@ -11,7 +11,7 @@ public class MenuController : MonoBehaviour
     //The states we can choose from
     public enum MenuState
     {
-        Game, Main, Settings, Help
+        Game, Main, Settings, Help, Pause
     }
 
     //State-object dictionary to make it easier to activate a menu 
@@ -58,7 +58,7 @@ public class MenuController : MonoBehaviour
         }
 
         //Activate the default menu
-        SetActiveState(MenuState.Game);
+        SetActiveState(MenuState.Main);
     }
 
 
@@ -68,7 +68,22 @@ public class MenuController : MonoBehaviour
         //Jump back one menu step when we press escape
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            activeState.JumpBack();
+            //activeState.JumpBack();
+             // If we're already in Pause, go back to Game
+            if (activeState.state == MenuState.Pause)
+            {
+                SetActiveState(MenuState.Game);
+            }
+            // If we're in Game, go to Pause
+            else if (activeState.state == MenuState.Game)
+            {
+                SetActiveState(MenuState.Pause);
+            }
+            else
+            {
+                // For other menus, jump back
+                activeState.JumpBack();
+            }
         }
     }
 
@@ -90,6 +105,29 @@ public class MenuController : MonoBehaviour
             //Activate the menu that's on the top of the stack
             SetActiveState(stateHistory.Peek(), isJumpingBack: true);
         }
+    }
+
+    public void AdjustUI()
+    {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+
+        if (sr == null) return;
+
+        transform.localScale = new Vector3(1, 1, 1);
+
+        float width = sr.sprite.bounds.size.x;
+        float height = sr.sprite.bounds.size.y;
+
+        float worldScreenHeight = Camera.main.orthographicSize * 2f;
+        float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
+
+        Vector3 xWidth = transform.localScale;
+        xWidth.x = worldScreenWidth / width;
+        transform.localScale = xWidth;
+
+        Vector3 yHeight = transform.localScale;
+        yHeight.y = worldScreenHeight / height;
+        transform.localScale = yHeight;
     }
 
 
@@ -115,11 +153,21 @@ public class MenuController : MonoBehaviour
         activeState = menuDictionary[newState];
 
         activeState.gameObject.SetActive(true);
-
+        Debug.Log($"<b>{activeState.state}</b> menu activated!");
         //If we are jumping back we shouldn't add to history because then we will get doubles
         if (!isJumpingBack)
         {
             stateHistory.Push(newState);
+        }
+
+        //Pause the game, no animations or anything else should happen when the game is paused
+        if (newState == MenuState.Pause)
+        {
+            Time.timeScale = 0f;
+        }
+        else if (activeState.state == MenuState.Pause)
+        {
+            Time.timeScale = 1f;
         }
     }
 

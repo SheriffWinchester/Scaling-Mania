@@ -63,4 +63,8 @@ public class PauseMenu : MonoBehaviour
             }
         }
     }
+    void MainMenuButton()
+    {
+        
+    }
 }

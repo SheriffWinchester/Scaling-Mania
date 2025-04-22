@@ -25,4 +25,9 @@ public class _MenuState : MonoBehaviour
     {
         menuController.JumpBack();
     }
+
+    public void AdjustUI()
+    {
+        menuController.AdjustUI();
+    }
 }
