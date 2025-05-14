@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 //The state machine, which keeps track of everything
 public class MenuController : MonoBehaviour
@@ -25,7 +26,11 @@ public class MenuController : MonoBehaviour
     //If so we don't have to hard-code in each state what happens when we jump back one step
     private Stack<MenuState> stateHistory = new Stack<MenuState>();
 
+    CanvasGroup canvasGroup;
+    Tween transitionTween = null;
+    const float fade = 1.5f;
 
+    private bool isTransitioning = false; // Flag to track if a transition is in progress
 
     void Start()
     {
@@ -65,11 +70,13 @@ public class MenuController : MonoBehaviour
 
     void Update()
     {
+        // Prevent pressing escape during transitions
+        if (isTransitioning) return;
+
         //Jump back one menu step when we press escape
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //activeState.JumpBack();
-             // If we're already in Pause, go back to Game
+            // If we're already in Pause, go back to Game
             if (activeState.state == MenuState.Pause)
             {
                 SetActiveState(MenuState.Game);
@@ -135,6 +142,13 @@ public class MenuController : MonoBehaviour
     //Activate a menu
     public void SetActiveState(MenuState newState, bool isJumpingBack = false)
     {
+        // Prevent new transitions while one is in progress
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        // --- remember where we’re coming from ----------------------------
+        _MenuState previous = activeState;
+
         //First check if this menu exists
         if (!menuDictionary.ContainsKey(newState))
         {
@@ -144,15 +158,42 @@ public class MenuController : MonoBehaviour
         }
 
         //Deactivate the old state
-        if (activeState != null)
+        if (previous != null)
         {
-            activeState.gameObject.SetActive(false);
+            // look on the root; if not found, look in children
+            CanvasGroup prevCG =
+                previous.GetComponent<CanvasGroup>() ??
+                previous.GetComponentInChildren<CanvasGroup>();
+
+            if (prevCG != null)
+            {
+                transitionTween.Kill(); // kill previous tween
+
+                transitionTween = prevCG.DOFade(0f, fade)
+                    .SetUpdate(true)                       // unscaled time
+                    .OnComplete(() => previous.gameObject.SetActive(false));
+            }
+            else
+            {
+                previous.gameObject.SetActive(false);        // fallback
+            }
         }
 
-        //Activate the new state
         activeState = menuDictionary[newState];
-
         activeState.gameObject.SetActive(true);
+
+        CanvasGroup newCG = activeState.GetComponent<CanvasGroup>();
+        if (newCG != null)
+        {
+            transitionTween.Kill(); // kill previous tween
+
+            newCG.alpha          = 0f;
+            newCG.interactable   = true;
+            newCG.blocksRaycasts = true;
+
+            transitionTween = newCG.DOFade(1f, fade).SetUpdate(true);
+        }
+
         Debug.Log($"<b>{activeState.state}</b> menu activated!");
         //If we are jumping back we shouldn't add to history because then we will get doubles
         if (!isJumpingBack)
@@ -161,14 +202,15 @@ public class MenuController : MonoBehaviour
         }
 
         //Pause the game, no animations or anything else should happen when the game is paused
-        if (newState == MenuState.Pause)
-        {
-            Time.timeScale = 0f;
-        }
-        else if (activeState.state == MenuState.Pause)
-        {
-            Time.timeScale = 1f;
-        }
+        
+
+        DOTween.Sequence()
+           .AppendInterval(fade)          // wait for the fades (uses unscaled)
+           .AppendCallback(() =>
+           {
+               Time.timeScale = (newState == MenuState.Pause) ? 0f : 1f;
+               isTransitioning = false; // Allow new transitions after completion
+           });
     }
 
 
