@@ -21,7 +21,7 @@ namespace State.Menu
         {
             base.InitState(menuController);
 
-            state = MenuController.MenuState.Main;
+            state = MenuController.MenuState.MainMenu;
             Debug.Log("State: " + state);
         }
 

@@ -21,8 +21,6 @@ public class PlayerActivate : MonoBehaviour
     }
     public void DeactivatePlayer()
     {
-        grapplingRope.enabled = false;
-        grapplingGun.enabled = false;
-        playerMovement.enabled = false;
+        gameObject.SetActive(false);
     }
 } 

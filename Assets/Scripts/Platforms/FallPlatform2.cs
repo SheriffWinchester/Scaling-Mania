@@ -64,7 +64,7 @@ public class FallPlatform2 : MonoBehaviour
             //grapplingRope.enabled = false;
             //m_springJoint2D.enabled = false;
 
-            Shake(0.5f, 0.05f); // Shake for 0.5 seconds with a magnitude of 0.2
+            Shake(0.5f, 0.01f); // Shake for 0.5 seconds with a magnitude of 0.2
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
     }

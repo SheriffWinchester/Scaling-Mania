@@ -29,12 +29,12 @@ public class GameManager : MonoBehaviour
             }
         }
         // Check if the player's Y position is less than 0 in viewport coordinates
-        if (player != null && Camera.main.WorldToViewportPoint(player.transform.position).y < 0)
-        {
-            //Physics2D.IgnoreLayerCollision(playerLayer, grappableLayer, false);//Enable collision of the player if snow collided with the player
-            // Reload the current scene to restart the game
-            Debug.Log("Restart the scene");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        // if (player != null && Camera.main.WorldToViewportPoint(player.transform.position).y < 0)
+        // {
+        //     //Physics2D.IgnoreLayerCollision(playerLayer, grappableLayer, false);//Enable collision of the player if snow collided with the player
+        //     // Reload the current scene to restart the game
+        //     Debug.Log("Restart the scene");
+        //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // }
     }
 }

@@ -11,7 +11,7 @@ public class MenuController : MonoBehaviour
     //The states we can choose from
     public enum MenuState
     {
-        Game, Main, Settings, Help, Pause
+        Game, MainMenu, SettingsMenu, HelpMenu, PauseMenu, GameOver
     }
 
     //State-object dictionary to make it easier to activate a menu 
@@ -58,7 +58,7 @@ public class MenuController : MonoBehaviour
         }
 
         //Activate the default menu
-        SetActiveState(MenuState.Main);
+        SetActiveState(MenuState.MainMenu);
     }
 
 
@@ -70,14 +70,14 @@ public class MenuController : MonoBehaviour
         {
             //activeState.JumpBack();
              // If we're already in Pause, go back to Game
-            if (activeState.state == MenuState.Pause)
+            if (activeState.state == MenuState.PauseMenu)
             {
                 SetActiveState(MenuState.Game);
             }
             // If we're in Game, go to Pause
             else if (activeState.state == MenuState.Game)
             {
-                SetActiveState(MenuState.Pause);
+                SetActiveState(MenuState.PauseMenu);
             }
             else
             {
@@ -95,7 +95,7 @@ public class MenuController : MonoBehaviour
         //If we have just one item in the stack then, it means we are at the state we set at start, so we have to jump forward
         if (stateHistory.Count <= 1)
         {
-            SetActiveState(MenuState.Main);
+            SetActiveState(MenuState.MainMenu);
         }
         else
         {
@@ -156,7 +156,7 @@ public class MenuController : MonoBehaviour
             stateHistory.Push(newState);
         }
 
-        if (newState == MenuState.Pause)
+        if (newState == MenuState.PauseMenu)
         {
             Time.timeScale = 0f;
         }

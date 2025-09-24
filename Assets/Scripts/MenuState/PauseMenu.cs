@@ -12,7 +12,7 @@ namespace State.Menu
         {
             base.InitState(menuController);
 
-            state = MenuController.MenuState.Pause;
+            state = MenuController.MenuState.PauseMenu;
             Debug.Log("State: " + state);
             AdjustUI();
         }
