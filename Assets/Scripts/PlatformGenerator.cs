@@ -25,7 +25,7 @@ public class PlatformGenerator : MonoBehaviour
     List<GameObject> chunks;
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject;
         trackManager = GameObject.Find("TrackManager");
         InitializeBounds();
 

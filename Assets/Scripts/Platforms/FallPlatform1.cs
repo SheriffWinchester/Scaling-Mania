@@ -14,9 +14,9 @@ public class FallPlatform1 : MonoBehaviour
         gameObject.AddComponent<Rigidbody2D>();
         rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;
-        grapplingGun = GameObject.Find("Player").GetComponent<GrapplingGun>();
-        grapplingRope = GameObject.Find("Player").GetComponent<GrapplingRope>();
-        m_springJoint2D = GameObject.Find("Player").GetComponent<SpringJoint2D>();
+        grapplingGun = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject.GetComponent<GrapplingGun>();
+        grapplingRope = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject.GetComponent<GrapplingRope>();
+        m_springJoint2D = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject.GetComponent<SpringJoint2D>();
     }
 
     // Update is called once per frame

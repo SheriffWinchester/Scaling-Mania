@@ -13,7 +13,7 @@ public class LevelGenerator : MonoBehaviour
     GameObject chunk;
     void Start()
     { 
-        player = GameObject.Find("Player");
+        player = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject;
 
         //Spawn first three chunks, append to a list.
         var startChunk = Instantiate(prefabLevelChunk, new Vector3(0, 5.2f, 0), Quaternion.identity);//Center of the game shifted a bit, that the player could be on the 0 coordinates

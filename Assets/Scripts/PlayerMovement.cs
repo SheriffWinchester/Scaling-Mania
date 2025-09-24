@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpDelay = 3f;
     private float jumpTimer = 0f;
 
+    float horizontalInput;
+
     public float movementSpeed = 150f;
 
     void Start()
@@ -30,13 +32,22 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
+        #if UNITY_ANDROID || UNITY_IOS
+            // Use accelerometer for mobile devices
+            horizontalInput = Input.acceleration.x;
+        #else
+            // Use keyboard for other platforms
+            horizontalInput = Input.GetAxis("Horizontal");
+        #endif
+
         if (grapplingGun.m_springJoint2D.enabled)
         {
             // Get the horizontal input (left or right)
-            float horizontalInput = Input.GetAxis("Horizontal");
+            //float horizontalInput = Input.GetAxis("Horizontal");
 
-            // Apply a force to the Rigidbody2D in the direction of the input
+            // Move left or right
             rb.AddForce(new Vector2((horizontalInput * movementSpeed) * Time.fixedDeltaTime, 0));
+            Debug.Log("Moving: " + horizontalInput);
         }
 
         // Check if the timer exceeds the delay

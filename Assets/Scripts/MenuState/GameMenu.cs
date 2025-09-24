@@ -8,7 +8,9 @@ public class GameMenu : _MenuState
     public override void InitState(MenuController menuController)
     {
         base.InitState(menuController);
-        
+
         state = MenuController.MenuState.Game;
+        Debug.Log("State: " + state);
     }
+
 }

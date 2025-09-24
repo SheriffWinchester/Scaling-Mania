@@ -11,7 +11,8 @@ namespace State.Menu
         public Camera mainCamera; // Reference to the main camera
         public float moveDuration = 2f; // Duration of the camera move
 
-        private GameObject menuPlayer;
+        public GameObject menuPlayer;
+        public GameObject gamePlayer;
         private GrapplingGun grapplingGun;
         private Vector2 grapplePoint;
 
@@ -21,11 +22,13 @@ namespace State.Menu
             base.InitState(menuController);
 
             state = MenuController.MenuState.Main;
+            Debug.Log("State: " + state);
         }
 
         public void PlayButton()
         {
             menuPlayer = GameObject.Find("MenuPlayer");
+            gamePlayer = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject;
             grapplingGun = menuPlayer.GetComponent<GrapplingGun>();
             
             menuPlayer.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = false;
@@ -47,12 +50,14 @@ namespace State.Menu
             {
                 Debug.Log("Camera moved to target position");
                 Singleton.instance.gameStarted = true;
-                
+
                 //Change the state to Game and set the canvas to active
                 JumpToGame();
+                gamePlayer.GetComponent<PlayerActivate>().ActivatePlayer(); //Activate the player scripts
             });
             //NPC on the main menu is not active after the camera move
             menuPlayer.SetActive(false);
+            gamePlayer.SetActive(true);
         }   
         public void JumpToGame()
         {

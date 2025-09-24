@@ -583,7 +583,7 @@ GameObject:
   - component: {fileID: 162665144}
   - component: {fileID: 162665143}
   - component: {fileID: 162665145}
-  - component: {fileID: 162665146}
+  - component: {fileID: 162665148}
   - component: {fileID: 162665147}
   m_Layer: 0
   m_Name: GameManager
@@ -633,19 +633,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 2031356057}
---- !u!114 &162665146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 162665142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f6b8d8a027883548be9a33db4e66d50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainMenu: {fileID: 0}
 --- !u!114 &162665147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,6 +649,18 @@ MonoBehaviour:
   - {fileID: 923117416}
   - {fileID: 2031356059}
   - {fileID: 1734756219}
+--- !u!114 &162665148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162665142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16405e8f6bc03a742b016101efdccd01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &175142695
 GameObject:
   m_ObjectHideFlags: 0
@@ -2513,13 +2512,14 @@ GameObject:
   - component: {fileID: 792434034}
   - component: {fileID: 792434035}
   - component: {fileID: 792434036}
+  - component: {fileID: 792434037}
   m_Layer: 6
-  m_Name: Player
+  m_Name: GamePlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &792434021
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2692,7 +2692,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792434020}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e5efa7e4d605324c9ca34609bd5a3f1, type: 3}
   m_Name: 
@@ -2741,7 +2741,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792434020}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25a86bbf7e8df4ebaa6609d693f84bcc, type: 3}
   m_Name: 
@@ -2818,7 +2818,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792434020}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2763a22b1a8624077843d382cd395c85, type: 3}
   m_Name: 
@@ -3006,7 +3006,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792434020}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e5efa7e4d605324c9ca34609bd5a3f1, type: 3}
   m_Name: 
@@ -3015,6 +3015,18 @@ MonoBehaviour:
   jumpForce: 6
   jumpDelay: 3
   movementSpeed: 350
+--- !u!114 &792434037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792434020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c5ac5538839ffd4cafff00001604fae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &817360174
 GameObject:
   m_ObjectHideFlags: 0
@@ -3302,6 +3314,8 @@ MonoBehaviour:
   trackManager: {fileID: 355962546}
   mainCamera: {fileID: 519420031}
   moveDuration: 2
+  menuPlayer: {fileID: 0}
+  gamePlayer: {fileID: 0}
 --- !u!225 &923117417
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4850,7 +4864,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1734756217}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16405e8f6bc03a742b016101efdccd01, type: 3}
   m_Name: 

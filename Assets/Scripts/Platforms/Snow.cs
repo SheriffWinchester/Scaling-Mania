@@ -16,7 +16,7 @@ public class Snow : MonoBehaviour
     string snowNumber;
     void Start()
     {
-        player = GameObject.Find("Player");
+        player = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject;
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         uiSprite1 = canvas.transform.Find("Interface/Exclamation Mark 1").GetComponent<RectTransform>();
         uiSprite2 = canvas.transform.Find("Interface/Exclamation Mark 2").GetComponent<RectTransform>();
@@ -89,7 +89,7 @@ public class Snow : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Collision detected with " + collision.gameObject.name);
-        if (collision.gameObject.name == "Player")
+        if (collision.gameObject.name == "GamePlayer")
         {
             Debug.Log("Player collided with snow");
 

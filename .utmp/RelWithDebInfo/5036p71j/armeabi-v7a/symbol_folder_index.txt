@@ -1,0 +1,1 @@
+C:\Users\m3llp\Projects\Gamedev\Unity\Scaling Mania\Library\Bee\Android\Prj\Mono2x\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\5036p71j\obj\armeabi-v7a

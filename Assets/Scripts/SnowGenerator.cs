@@ -14,7 +14,7 @@ public class SnowGenerator : MonoBehaviour
     void Start()
     {
         //CHECK SNOW SPAWNING AT THE START, CONSIDER TO REDO
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject;
         //lastSnowSpawnY = Mathf.Abs(player.transform.position.y) - 11;//Initialize the last snow spawn position - 10 that it can spawn the first time
         Debug.Log("##45 Last snow spawn position: " + lastSnowSpawnY);
         //Debug.Log("##45 Calc: " + (4 - (-5)));

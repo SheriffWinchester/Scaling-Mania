@@ -12,10 +12,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        //player = GameObject.Find("Player");
-        //Screen.SetResolution(1440, 3088, false);
-        //playerLayer = player.layer;
-        // Get the grappable layer
         grappableLayer  = LayerMask.NameToLayer("Grappable");
     }
 
@@ -25,7 +21,7 @@ public class GameManager : MonoBehaviour
         // Continuously search for the player until it is found
         if (player == null)
         {
-            player = GameObject.Find("Player");
+            player = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject;
             if (player != null)
             {
                 playerLayer = player.layer;

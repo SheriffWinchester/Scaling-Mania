@@ -13,7 +13,7 @@ namespace State.Menu
             base.InitState(menuController);
 
             state = MenuController.MenuState.Pause;
-            Debug.Log("Pause Menu Initialized");
+            Debug.Log("State: " + state);
             AdjustUI();
         }
 
