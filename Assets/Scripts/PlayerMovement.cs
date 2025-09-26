@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
         }    
     }
 
-    void Jump()
+    public void Jump()
     {
         // Implement the jump logic here
         // For example, applying an upward force to the player's Rigidbody2D

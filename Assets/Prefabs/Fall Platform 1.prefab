@@ -167,3 +167,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345d27598ec024e9e9c8b33530998dc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fallPlatformShattered: {fileID: 5355299612322604706, guid: 52c1da4bb83cb2b46894d80a2b56f9f1, type: 3}

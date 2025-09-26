@@ -8,6 +8,7 @@ public class FallPlatform1 : MonoBehaviour
     GrapplingRope grapplingRope;
     SpringJoint2D m_springJoint2D;
     Rigidbody2D rb;
+    public GameObject fallPlatformShattered;
     
     void Start()
     {
@@ -30,8 +31,13 @@ public class FallPlatform1 : MonoBehaviour
         if (grapplingTarget == this.gameObject && grapplingRope.isGrappling == true)
         {
             Debug.Log("Fall script works");
-            rb.bodyType = RigidbodyType2D.Dynamic;
-            grapplingGun.m_springJoint2D.enabled = false;
+            // Instantiate shattered platform at current position and rotation
+            Instantiate(fallPlatformShattered, transform.position, transform.rotation);
+            // Destroy this platform
+            Destroy(gameObject);
+            
+            // rb.bodyType = RigidbodyType2D.Dynamic;
+            // grapplingGun.m_springJoint2D.enabled = false;
             //m_springJoint2D.enabled = false;
         }
     }
