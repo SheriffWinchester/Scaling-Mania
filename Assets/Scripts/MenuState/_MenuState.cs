@@ -7,6 +7,7 @@ public class _MenuState : MonoBehaviour
 {
     public MenuController.MenuState state { get; protected set; }
     protected MenuController menuController;
+    protected GameStateController gameStateController;
     private CanvasGroup canvasGroup;
     private Coroutine fadeCoroutine;
 
@@ -22,6 +23,12 @@ public class _MenuState : MonoBehaviour
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
         gameObject.SetActive(false);
+    }
+
+    // For GameStateController
+    public virtual void InitState(GameStateController gameStateController)
+    {
+        this.gameStateController = gameStateController;
     }
 
     public void Show(float duration = 0.3f)

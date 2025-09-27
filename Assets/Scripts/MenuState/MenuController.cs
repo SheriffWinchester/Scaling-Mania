@@ -156,14 +156,14 @@ public class MenuController : MonoBehaviour
             stateHistory.Push(newState);
         }
 
-        if (newState == MenuState.PauseMenu || newState == MenuState.SettingsMenu || newState == MenuState.HelpMenu)
-        {
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            Time.timeScale = 1f;
-        }
+        // if (newState == MenuState.PauseMenu || newState == MenuState.SettingsMenu || newState == MenuState.HelpMenu)
+        // {
+        //     Time.timeScale = 0f;
+        // }
+        // else
+        // {
+        //     Time.timeScale = 1f;
+        // }
     }
 
 

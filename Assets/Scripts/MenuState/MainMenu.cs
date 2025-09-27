@@ -7,6 +7,7 @@ namespace State.Menu
 {
     public class MainMenu : _MenuState
     {
+        public GameStateController gameStateController;
         public GameObject trackManager;
         public Camera mainCamera; // Reference to the main camera
         public float moveDuration = 2f; // Duration of the camera move
@@ -24,13 +25,20 @@ namespace State.Menu
             state = MenuController.MenuState.MainMenu;
             Debug.Log("State: " + state);
         }
+        public override void InitState(GameStateController gameStateController)
+        {
+            base.InitState(gameStateController);
+
+            state = GameStateController.GameState.Game;
+            Debug.Log("State: " + state);
+        }
 
         public void PlayButton()
         {
             menuPlayer = GameObject.Find("MenuPlayer");
             gamePlayer = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject;
             grapplingGun = menuPlayer.GetComponent<GrapplingGun>();
-            
+
             menuPlayer.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = false;
             menuPlayer.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
             Singleton.instance.playerObjectMenuReady = true;
@@ -41,7 +49,7 @@ namespace State.Menu
 
             //Move the camera, change the state to Game and set the canvas to active
             Invoke("MoveCamera", 1f);
-            
+
         }
 
         void MoveCamera()
@@ -61,7 +69,7 @@ namespace State.Menu
         }   
         public void JumpToGame()
         {
-            menuController.SetActiveState(MenuController.MenuState.Game);
+            gameStateController.SetActiveState(GameStateController.GameState.Game);
         }
 
         public void QuitGame()
