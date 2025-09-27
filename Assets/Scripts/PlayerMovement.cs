@@ -32,13 +32,13 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
-        #if UNITY_ANDROID || UNITY_IOS
-            // Use accelerometer for mobile devices
-            horizontalInput = Input.acceleration.x;
-        #else
+#if UNITY_ANDROID || UNITY_IOS
+        // Use accelerometer for mobile devices
+        horizontalInput = Input.acceleration.x;
+#else
             // Use keyboard for other platforms
             horizontalInput = Input.GetAxis("Horizontal");
-        #endif
+#endif
 
         if (grapplingGun.m_springJoint2D.enabled)
         {
@@ -55,7 +55,28 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump();
             jumpTimer = 0f; // Reset the timer
-        }    
+        }
+
+        Vector3 mousePos = Input.mousePosition;
+
+        // Mouse input (PC/editor)
+        if (Input.GetMouseButtonDown(0) && mousePos.y > MainCamera.pixelHeight * 0.25f)
+        {
+            Jump();
+        }
+
+        // Touch input (mobile)
+        if (Input.touchCount > 0)
+        {
+            foreach (Touch touch in Input.touches)
+            {
+                if (touch.phase == TouchPhase.Began && touch.position.y > MainCamera.pixelHeight * 0.25f)
+                {
+                    Jump();
+                    break;
+                }
+            }
+        } 
     }
 
     public void Jump()

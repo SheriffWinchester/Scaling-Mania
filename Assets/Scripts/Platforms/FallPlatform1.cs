@@ -33,12 +33,14 @@ public class FallPlatform1 : MonoBehaviour
             Debug.Log("Fall script works");
             // Instantiate shattered platform at current position and rotation
             Instantiate(fallPlatformShattered, transform.position, transform.rotation);
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            grapplingGun.m_springJoint2D.enabled = false;
+            grapplingRope.enabled = false;
+            //m_springJoint2D.enabled = false;
+            //grapplingGun.grapplePoint = Vector2.zero;
             // Destroy this platform
             Destroy(gameObject);
-            
-            // rb.bodyType = RigidbodyType2D.Dynamic;
-            // grapplingGun.m_springJoint2D.enabled = false;
-            //m_springJoint2D.enabled = false;
+
         }
     }
 }

@@ -254,13 +254,13 @@ public class GrapplingGun : MonoBehaviour
 
     private void DrawCursor()
     {
-         // Get the mouse position in world coordinates
+        // Get the mouse position in world coordinates
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = gunPivot.position.z;
         // Calculate the direction from the player to the mouse
         Vector3 direction = mousePosition - gunPivot.position;
 
-         // If the mouse is out of max distance, switch off the cursor
+        // If the mouse is out of max distance, switch off the cursor
         if (direction.magnitude > maxDistnace)
         {
             cursor.SetActive(false);
@@ -276,6 +276,24 @@ public class GrapplingGun : MonoBehaviour
 
             // Update the position of the cursor
             cursor.transform.position = gunPivot.position + direction;
+        }
+        
+        // Change the color of the cursor based on its vertical position
+        Vector3 mousePos;
+        mousePos = Input.mousePosition;
+        Camera MainCamera = Camera.main;
+        var sr = cursor.GetComponent<SpriteRenderer>();
+        Debug.Log("Pixel Height: " + MainCamera.pixelHeight);
+        Debug.Log("Mouse Y: " + mousePos.y);
+        if (mousePos.y > MainCamera.pixelHeight * 0.25f)
+        {
+            if (sr != null)
+                sr.color = Color.green;
+        }
+        else
+        {
+            if (sr != null)
+                sr.color = Color.red;
         }
     }
 }
