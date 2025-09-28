@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
+
 public class PauseButton : MonoBehaviour
 {
-    public MenuController menuController;
+    public StateController stateController;
     public void PressButton()
     {
-        menuController.SetActiveState(MenuController.MenuState.PauseMenu);
+        stateController.SetActiveGlobalState(StateController.GlobalState.Menu);
+        stateController.SetActiveMenuState(StateController.MenuState.PauseMenu);
     }
 }

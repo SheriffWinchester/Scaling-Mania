@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 public class ResumeButton : MonoBehaviour
 {
-    public MenuController menuController;
+    public StateController stateController;
     public void PressButton()
     {
-        menuController.SetActiveState(MenuController.MenuState.Game);
+        // if (stateController.activeGlobalState.globalState == StateController.GlobalState.Menu)
+        // {
+        //     stateController.SetActiveGlobalState(StateController.GlobalState.Game);
+        // }
+        stateController.JumpBack();
     }
 }

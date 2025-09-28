@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace State.Menu
 {
-    public class PauseMenu : _MenuState
+    public class PauseMenu : _State
     {
         //Specific for this state
-        public override void InitState(MenuController menuController)
+        public override void InitMenuState(StateController stateController)
         {
-            base.InitState(menuController);
+            base.InitMenuState(stateController);
 
-            state = MenuController.MenuState.PauseMenu;
+            state = StateController.MenuState.PauseMenu;
             Debug.Log("State: " + state);
             AdjustUI();
         }
@@ -24,17 +24,17 @@ namespace State.Menu
 
         // public void JumpToSettings()
         // {
-        //     menuController.SetActiveState(MenuController.MenuState.Settings);
+        //     stateController.SetActiveMenuState(StateController.MenuState.Settings);
         // }
 
         // public void JumpToHelp()
         // {
-        //     menuController.SetActiveState(MenuController.MenuState.Help);
+        //     stateController.SetActiveMenuState(StateController.MenuState.Help);
         // }
 
         public void QuitGame()
         {
-            menuController.QuitGame();
+            stateController.QuitGame();
         }
     }
 }

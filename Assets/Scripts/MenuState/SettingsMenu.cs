@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SettingsMenu : _MenuState
+public class SettingsMenu : _State
 {
     //Specific for this state
-    public override void InitState(MenuController menuController)
+    public override void InitMenuState(StateController stateController)
     {
-        base.InitState(menuController);
+        base.InitMenuState(stateController);
 
-        state = MenuController.MenuState.SettingsMenu;
+        state = StateController.MenuState.SettingsMenu;
         Debug.Log("State: " + state);
     }
 

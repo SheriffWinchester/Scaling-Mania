@@ -9,50 +9,32 @@ public class SettingsScript : MonoBehaviour
     public bool soundEnabled = true;
     
     [Header("UI Elements")]
-    public Image soundButtonImage;
     public Sprite soundOnSprite;
     public Sprite soundOffSprite;
-    
+    //public Button soundButton; // assign your button in the Inspector
+
+    private Image buttonImage;
+
     void Start()
     {
-        // Initialize sound state and button sprite
-        UpdateSoundState();
+        buttonImage = GetComponent<Image>();
         UpdateButtonSprite();
+
+        // Add listener so pressing the button calls ToggleSound
+        //soundButton.onClick.AddListener(ToggleSound);
     }
-    
+
     public void ToggleSound()
     {
         soundEnabled = !soundEnabled;
-        if (soundEnabled)
-        {
-            soundEnabled = false;
-            Debug.Log("Sound is currently ON. Turning it OFF.");
-        }
-        else
-        {
-            Debug.Log("Sound is currently OFF. Turning it ON.");
-        }
-        UpdateSoundState();
         UpdateButtonSprite();
+
+        // Here you can also mute/unmute audio globally if needed:
+        // AudioListener.volume = soundEnabled ? 1f : 0f;
     }
-    
-    private void UpdateSoundState()
-    {
-        if (soundEnabled)
-        {
-            AudioListener.volume = 1f; // Enable all sounds
-        }
-        else
-        {
-            AudioListener.volume = 0f; // Mute all sounds
-        }
-    }
-    
+
     private void UpdateButtonSprite()
     {
-        if (soundButtonImage != null)
-        {
-            soundButtonImage.sprite = soundEnabled ? soundOnSprite : soundOffSprite;
-        }
+            buttonImage.sprite = soundEnabled ? soundOnSprite : soundOffSprite;
     }
 }

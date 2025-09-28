@@ -5,7 +5,7 @@ using DG.Tweening;
 
 namespace State.Menu
 {
-    public class MainMenu : _MenuState
+    public class MainMenu : _State
     {
         public GameObject trackManager;
         public Camera mainCamera; // Reference to the main camera
@@ -17,11 +17,11 @@ namespace State.Menu
         private Vector2 grapplePoint;
 
         //Specific for this state
-        public override void InitState(MenuController menuController)
+        public override void InitMenuState(StateController stateController)
         {
-            base.InitState(menuController);
+            base.InitMenuState(stateController);
 
-            state = MenuController.MenuState.MainMenu;
+            state = StateController.MenuState.MainMenu;
             Debug.Log("State: " + state);
         }
 
@@ -38,7 +38,9 @@ namespace State.Menu
 
             trackManager.SetActive(true);
             Debug.Log("Play Button Pressed");
-
+            
+            //Change the global state to Game
+            stateController.SetActiveGlobalState(StateController.GlobalState.Game);
             //Move the camera, change the state to Game and set the canvas to active
             Invoke("MoveCamera", 1f);
             
@@ -61,12 +63,12 @@ namespace State.Menu
         }   
         public void JumpToGame()
         {
-            menuController.SetActiveState(MenuController.MenuState.Game);
+            stateController.SetActiveMenuState(StateController.MenuState.Game);
         }
 
         public void QuitGame()
         {
-            menuController.QuitGame();
+            stateController.QuitGame();
         }
     }
 }

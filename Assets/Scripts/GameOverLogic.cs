@@ -5,14 +5,14 @@ using UnityEngine.SceneManagement; // Required for scene management
 
 public class GameOverLogic : MonoBehaviour
 {
-    public MenuController menuController;
+    public StateController stateController;
     PlayerActivate playerActivate;
     public GameObject player;
     private bool gameOverTriggered = false;
 
     void Start()
     {
-        menuController = GameObject.Find("MenuController").GetComponent<MenuController>();
+        stateController = GameObject.Find("StateController").GetComponent<StateController>();
         //playerActivate = GameObject.Find("TrackManager").transform.Find("GamePlayer").GetComponent<PlayerActivate>();
         player = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject;
         //Deactivate player controls
@@ -28,7 +28,7 @@ public class GameOverLogic : MonoBehaviour
         {
             gameOverTriggered = true; // Prevent further execution
             Debug.Log("Player fell down, game over");
-            menuController.SetActiveState(MenuController.MenuState.GameOver);
+            stateController.SetActiveMenuState(StateController.MenuState.GameOver);
             player.SetActive(false); //Deactivate player object
         }
         gameOverTriggered = false; // Reset for next frame check (if needed)
