@@ -32,12 +32,13 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
+        // Might be wrong macros, CHECK THIS!!!!
 #if UNITY_ANDROID || UNITY_IOS
         // Use accelerometer for mobile devices
         horizontalInput = Input.acceleration.x;
 #else
-            // Use keyboard for other platforms
-            horizontalInput = Input.GetAxis("Horizontal");
+        // Use keyboard for other platforms
+        horizontalInput = Input.GetAxis("Horizontal");
 #endif
 
         if (grapplingGun.m_springJoint2D.enabled)
@@ -50,33 +51,20 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Moving: " + horizontalInput);
         }
 
-        // Check if the timer exceeds the delay
-        if (Input.GetKeyDown(KeyCode.Space) && jumpTimer >= jumpDelay)
+        if (jumpTimer >= jumpDelay)
         {
-            Jump();
-            jumpTimer = 0f; // Reset the timer
-        }
-
-        Vector3 mousePos = Input.mousePosition;
-
-        // Mouse input (PC/editor)
-        if (Input.GetMouseButtonDown(0) && mousePos.y > MainCamera.pixelHeight * 0.25f)
-        {
-            Jump();
-        }
-
-        // Touch input (mobile)
-        if (Input.touchCount > 0)
-        {
-            foreach (Touch touch in Input.touches)
+            // Touch (Mobile)
+            for (int i = 0; i < Input.touchCount; i++)
             {
-                if (touch.phase == TouchPhase.Began && touch.position.y > MainCamera.pixelHeight * 0.25f)
+                var touch = Input.GetTouch(i);
+                if (touch.phase == TouchPhase.Began && touch.position.y <= Screen.height * 0.25f)
                 {
                     Jump();
+                    jumpTimer = 0f;
                     break;
                 }
             }
-        } 
+        }
     }
 
     public void Jump()

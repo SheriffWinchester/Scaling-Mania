@@ -30,7 +30,7 @@ public class SettingsScript : MonoBehaviour
         UpdateButtonSprite();
 
         // Here you can also mute/unmute audio globally if needed:
-        // AudioListener.volume = soundEnabled ? 1f : 0f;
+        AudioListener.volume = soundEnabled ? 1f : 0f;
     }
 
     private void UpdateButtonSprite()

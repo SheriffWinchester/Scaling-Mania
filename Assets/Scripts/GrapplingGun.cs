@@ -57,6 +57,10 @@ public class GrapplingGun : MonoBehaviour
     public GameObject childObject;
     public Vector2 distanceVector;
 
+    public AudioClip clickClip;
+    [Range(0f, 1f)] public float volume = 1f;
+    public AudioSource audioSource;
+
     int layerMaskGrappable = 1 << 8;
 
     private void Start()
@@ -179,6 +183,7 @@ public class GrapplingGun : MonoBehaviour
                     grappleRope.enabled = true;
                     Debug.Log(grappleRope.enabled);
                     Debug.DrawRay(firePoint.position, distanceVector.normalized * maxDistnace, Color.red, 2f);
+                    if (clickClip != null) audioSource.PlayOneShot(clickClip, volume); // Play sound on successful grapple
                 }
             }
             if (_hit == null)

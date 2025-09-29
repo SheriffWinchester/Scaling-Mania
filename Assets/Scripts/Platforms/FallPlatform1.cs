@@ -39,7 +39,8 @@ public class FallPlatform1 : MonoBehaviour
             //m_springJoint2D.enabled = false;
             //grapplingGun.grapplePoint = Vector2.zero;
             // Destroy this platform
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
 
         }
     }
