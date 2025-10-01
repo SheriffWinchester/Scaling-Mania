@@ -25,7 +25,7 @@ public class GrapplingGun : MonoBehaviour
 
     [Header("Rotation:")]
     [SerializeField] private bool rotateOverTime = true;
-    [Range(0, 60)] [SerializeField] private float rotationSpeed = 4;
+    [Range(0, 60)][SerializeField] private float rotationSpeed = 4;
 
     [Header("Distance:")]
     [SerializeField] private bool hasMaxDistance = false;
@@ -57,11 +57,24 @@ public class GrapplingGun : MonoBehaviour
     public GameObject childObject;
     public Vector2 distanceVector;
 
+    [Header("Sound Effects")]
     public AudioClip clickClip;
     [Range(0f, 1f)] public float volume = 1f;
     public AudioSource audioSource;
 
     int layerMaskGrappable = 1 << 8;
+
+    // Debug drag line
+    private LineRenderer dragLine;
+    private bool isDragging = false;
+    private Vector3 dragStartWorld;
+
+    [Header("Drag Line")]
+    public Color lineStartColor = new Color(1f, 1f, 1f, 0.9f);
+    public Color lineEndColor = new Color(1f, 1f, 1f, 0.2f);
+    public float lineWidth = 0.03f;
+    public string lineSortingLayer = "Default";
+    public int lineSortingOrder = 10;
 
     private void Start()
     {
@@ -69,12 +82,23 @@ public class GrapplingGun : MonoBehaviour
         m_springJoint2D.enabled = false;
         childObject = new GameObject("ChildObject");
 
+        // Setup debug drag line
+        dragLine = gameObject.AddComponent<LineRenderer>();
+        dragLine.useWorldSpace = true;
+        dragLine.positionCount = 2;
+        dragLine.startWidth = 0.03f;
+        dragLine.endWidth = 0.03f;
+        dragLine.material = new Material(Shader.Find("Sprites/Default"));
+        dragLine.startColor = new Color(1f, 1f, 1f, 0.8f);
+        dragLine.endColor = new Color(1f, 1f, 1f, 0.2f);
+        dragLine.enabled = false;
     }
 
     private void Update()
     {
         //Debug.Log("Camera: " + m_camera.WorldToViewportPoint(transform.position));
         DrawCursor();
+        //DrawLine();
         if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
         {
             Debug.Log("Gun script 1");
@@ -138,7 +162,7 @@ public class GrapplingGun : MonoBehaviour
             }
         }
         Debug.Log("Gun script 5");
-        
+
     }
 
     void RotateGun(Vector3 lookPoint, bool allowRotationOverTime)
@@ -282,7 +306,7 @@ public class GrapplingGun : MonoBehaviour
             // Update the position of the cursor
             cursor.transform.position = gunPivot.position + direction;
         }
-        
+
         // Change the color of the cursor based on its vertical position
         Vector3 mousePos;
         mousePos = Input.mousePosition;
@@ -300,5 +324,50 @@ public class GrapplingGun : MonoBehaviour
             if (sr != null)
                 sr.color = Color.red;
         }
+    }
+
+    public void DrawLine()
+    {
+        bool pointerDown = Input.GetMouseButtonDown(0);
+        bool pointerHeld = Input.GetMouseButton(0);
+        bool pointerUp = Input.GetMouseButtonUp(0);
+        Vector2 pointerPos = Input.mousePosition;
+
+#if UNITY_ANDROID || UNITY_IOS
+        if (Input.touchCount > 0)
+        {
+            var t = Input.GetTouch(0);
+            pointerPos = t.position;
+            pointerDown = t.phase == TouchPhase.Began;
+            pointerHeld = t.phase == TouchPhase.Moved || t.phase == TouchPhase.Stationary;
+            pointerUp = t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled;
+        }
+#endif
+        if (pointerDown)
+        {
+            isDragging = true;
+            dragStartWorld = GetPointerWorldPosition(pointerPos);
+            dragLine.SetPosition(0, dragStartWorld);
+            dragLine.SetPosition(1, dragStartWorld);
+            dragLine.enabled = true;
+        }
+        if (isDragging && pointerHeld)
+        {
+            Vector3 current = GetPointerWorldPosition(pointerPos);
+            dragLine.SetPosition(0, dragStartWorld);
+            dragLine.SetPosition(1, current);
+        }
+        if (pointerUp)
+        {
+            isDragging = false;
+            dragLine.enabled = false;
+        }
+    }
+    private Vector3 GetPointerWorldPosition(Vector2 screenPos)
+    {
+        float z = Mathf.Abs(gunPivot.position.z - m_camera.transform.position.z);
+        Vector3 wp = m_camera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, z));
+        wp.z = gunPivot.position.z;
+        return wp;
     }
 }

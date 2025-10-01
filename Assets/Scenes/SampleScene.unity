@@ -1195,6 +1195,11 @@ MonoBehaviour:
   clickClip: {fileID: 0}
   volume: 1
   audioSource: {fileID: 0}
+  lineStartColor: {r: 1, g: 1, b: 1, a: 0.9}
+  lineEndColor: {r: 1, g: 1, b: 1, a: 0.2}
+  lineWidth: 0.03
+  lineSortingLayer: Default
+  lineSortingOrder: 10
 --- !u!114 &175142700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4381,6 +4386,7 @@ GameObject:
   - component: {fileID: 792434036}
   - component: {fileID: 792434037}
   - component: {fileID: 792434038}
+  - component: {fileID: 792434039}
   m_Layer: 6
   m_Name: GamePlayer
   m_TagString: Player
@@ -4722,6 +4728,11 @@ MonoBehaviour:
   clickClip: {fileID: 8300000, guid: ff70f05f6b2366141919b51ea1ab871b, type: 3}
   volume: 0.708
   audioSource: {fileID: 792434038}
+  lineStartColor: {r: 1, g: 1, b: 1, a: 0.9}
+  lineEndColor: {r: 1, g: 1, b: 1, a: 0.2}
+  lineWidth: 0.03
+  lineSortingLayer: Default
+  lineSortingOrder: 10
 --- !u!120 &792434034
 LineRenderer:
   serializedVersion: 2
@@ -4996,6 +5007,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &792434039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792434020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f536fefc230551429b9e62922d3b758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &817360174
 GameObject:
   m_ObjectHideFlags: 0
@@ -7562,6 +7585,11 @@ MonoBehaviour:
   clickClip: {fileID: 0}
   volume: 1
   audioSource: {fileID: 0}
+  lineStartColor: {r: 1, g: 1, b: 1, a: 0.9}
+  lineEndColor: {r: 1, g: 1, b: 1, a: 0.2}
+  lineWidth: 0.03
+  lineSortingLayer: Default
+  lineSortingOrder: 10
 --- !u!114 &1476681512
 MonoBehaviour:
   m_ObjectHideFlags: 0
