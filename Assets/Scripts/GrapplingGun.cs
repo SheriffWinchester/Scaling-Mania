@@ -75,7 +75,11 @@ public class GrapplingGun : MonoBehaviour
     public float lineWidth = 0.03f;
     public string lineSortingLayer = "Default";
     public int lineSortingOrder = 10;
-
+    // Slingshot config
+    [Header("Slingshot")]
+    public float minPullDistance = 0.25f;
+    private bool hasPreparedShot = false;
+    private Vector2 preparedDirection;
     private void Start()
     {
         grappleRope.enabled = false;
@@ -98,7 +102,17 @@ public class GrapplingGun : MonoBehaviour
     {
         //Debug.Log("Camera: " + m_camera.WorldToViewportPoint(transform.position));
         DrawCursor();
-        //DrawLine();
+        DrawLine();
+        // Fire when a drag prepared a shot
+        if (hasPreparedShot && mousePosActive)
+        {
+            SetGrapplePoint();
+            hasPreparedShot = false;
+
+            // keep your existing parenting behavior
+            childObject.transform.position = grapplePoint;
+            childObject.transform.SetParent(grappleObject != null ? grappleObject.transform : null, true);
+        }
         if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
         {
             Debug.Log("Gun script 1");
@@ -184,7 +198,11 @@ public class GrapplingGun : MonoBehaviour
     public void SetGrapplePoint()
     {
         Debug.Log("Set Grapple Point");
-        if (Singleton.instance.playerObjectMenuReady)
+        if (hasPreparedShot)
+        {
+            distanceVector = preparedDirection; // already normalized later
+        }
+        else if (Singleton.instance.playerObjectMenuReady)
         {
             distanceVector = new Vector3(0, 1, 0) - gunPivot.position;
         }
@@ -212,13 +230,15 @@ public class GrapplingGun : MonoBehaviour
             }
             if (_hit == null)
             {
-                grapplePoint = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position;
+                grapplePoint = (Vector2)(gunPivot.position) + distanceVector.normalized * maxDistnace;
                 Debug.Log("Point in the air: " + grapplePoint);
                 grappleObject = null;
                 grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
                 grappleRope.enabled = true;
             }
         }
+
+        hasPreparedShot = false;
     }
 
     public void Grapple()
@@ -340,10 +360,10 @@ public class GrapplingGun : MonoBehaviour
             pointerPos = t.position;
             pointerDown = t.phase == TouchPhase.Began;
             pointerHeld = t.phase == TouchPhase.Moved || t.phase == TouchPhase.Stationary;
-            pointerUp = t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled;
+            pointerUp  = t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled;
         }
 #endif
-        if (pointerDown)
+        if (pointerDown && mousePosActive)
         {
             isDragging = true;
             dragStartWorld = GetPointerWorldPosition(pointerPos);
@@ -354,13 +374,25 @@ public class GrapplingGun : MonoBehaviour
         if (isDragging && pointerHeld)
         {
             Vector3 current = GetPointerWorldPosition(pointerPos);
-            dragLine.SetPosition(0, dragStartWorld);
-            dragLine.SetPosition(1, current);
+            // Optional: show inverted line (aim direction) from anchor (gunPivot)
+            Vector2 pull = (Vector2)(current - gunPivot.position);
+            Vector3 invertedEnd = gunPivot.position - (Vector3)pull;
+            dragLine.SetPosition(0, gunPivot.position);
+            dragLine.SetPosition(1, invertedEnd);
         }
-        if (pointerUp)
+        if (pointerUp && isDragging)
         {
             isDragging = false;
             dragLine.enabled = false;
+
+            // Prepare shot: aim opposite to pull from gunPivot
+            Vector3 releaseWorld = GetPointerWorldPosition(pointerPos);
+            Vector2 pull = (Vector2)(releaseWorld - gunPivot.position);
+            if (pull.magnitude >= minPullDistance)
+            {
+                preparedDirection = -pull.normalized; // opposite to drag
+                hasPreparedShot = true;
+            }
         }
     }
     private Vector3 GetPointerWorldPosition(Vector2 screenPos)

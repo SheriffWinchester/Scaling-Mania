@@ -51,7 +51,7 @@ public class PlayerDrawALine : MonoBehaviour
             return; // don’t process mouse if touch is present
         }
 #endif
-        // Mouse input (editor/PC)
+        //Mouse input (editor/PC)
         if (Input.GetMouseButtonDown(0))
         {
             isDragging = true;
@@ -60,12 +60,14 @@ public class PlayerDrawALine : MonoBehaviour
             lineRend.SetPosition(0, new Vector3(startPos.x, startPos.y, lineZ));
             lineRend.SetPosition(1, new Vector3(startPos.x, startPos.y, lineZ));
         }
-        else if (isDragging && Input.GetMouseButton(0))
+        if (isDragging && Input.GetMouseButton(0))
         {
+            var pull = currentPos - startPos;
+            var reversedEnd = startPos - pull; 
             currentPos = ScreenToWorldOnZ(Input.mousePosition);
             lineRend.SetPosition(0, new Vector3(startPos.x, startPos.y, lineZ));
-            lineRend.SetPosition(1, new Vector3(currentPos.x, currentPos.y, lineZ));
-            distance = (currentPos - startPos).magnitude;
+            lineRend.SetPosition(1, new Vector3(reversedEnd.x, reversedEnd.y, lineZ));
+            distance = pull.magnitude;
         }
         else if (isDragging && Input.GetMouseButtonUp(0))
         {
