@@ -57,62 +57,30 @@ public class GrapplingGun : MonoBehaviour
     public GameObject childObject;
     public Vector2 distanceVector;
 
-    [Header("Sound Effects")]
     public AudioClip clickClip;
     [Range(0f, 1f)] public float volume = 1f;
     public AudioSource audioSource;
 
+    bool isGrappling = false;
     int layerMaskGrappable = 1 << 8;
 
-    // Debug drag line
-    private LineRenderer dragLine;
-    private bool isDragging = false;
-    private Vector3 dragStartWorld;
-
-    [Header("Drag Line")]
-    public Color lineStartColor = new Color(1f, 1f, 1f, 0.9f);
-    public Color lineEndColor = new Color(1f, 1f, 1f, 0.2f);
-    public float lineWidth = 0.03f;
-    public string lineSortingLayer = "Default";
-    public int lineSortingOrder = 10;
-    // Slingshot config
-    [Header("Slingshot")]
-    public float minPullDistance = 0.25f;
-    private bool hasPreparedShot = false;
-    private Vector2 preparedDirection;
     private void Start()
     {
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
         childObject = new GameObject("ChildObject");
 
-        // Setup debug drag line
-        dragLine = gameObject.AddComponent<LineRenderer>();
-        dragLine.useWorldSpace = true;
-        dragLine.positionCount = 2;
-        dragLine.startWidth = 0.03f;
-        dragLine.endWidth = 0.03f;
-        dragLine.material = new Material(Shader.Find("Sprites/Default"));
-        dragLine.startColor = new Color(1f, 1f, 1f, 0.8f);
-        dragLine.endColor = new Color(1f, 1f, 1f, 0.2f);
-        dragLine.enabled = false;
     }
 
     private void Update()
     {
         //Debug.Log("Camera: " + m_camera.WorldToViewportPoint(transform.position));
+        //ClassicInput();
+        AlternativeInput();
+    }
+    private void ClassicInput()
+    {
         DrawCursor();
-        DrawLine();
-        // Fire when a drag prepared a shot
-        if (hasPreparedShot && mousePosActive)
-        {
-            SetGrapplePoint();
-            hasPreparedShot = false;
-
-            // keep your existing parenting behavior
-            childObject.transform.position = grapplePoint;
-            childObject.transform.SetParent(grappleObject != null ? grappleObject.transform : null, true);
-        }
         if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
         {
             Debug.Log("Gun script 1");
@@ -122,9 +90,8 @@ public class GrapplingGun : MonoBehaviour
 
             // Set the parent of the childObject to the grappleObject
             childObject.transform.SetParent(grappleObject.transform, true);
-            //grapplePoint = grappleObject.transform.InverseTransformPoint(grapplePoint);
         }
-        else if (!isPlayer && Singleton.instance.playerObjectMenuReady)
+        else if (!isPlayer && Singleton.instance.playerObjectMenuReady) // For menu player object
         {
             Debug.Log("#343");
             SetGrapplePoint();
@@ -176,7 +143,98 @@ public class GrapplingGun : MonoBehaviour
             }
         }
         Debug.Log("Gun script 5");
+    }
+    private void AlternativeInput()
+    {
+        DrawCursor();
+        if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
+        {
+            Debug.Log("Gun script 1");
+            SetGrapplePoint();
+            // Set the position of the childObject to the grapplePoint
+            childObject.transform.position = grapplePoint;
 
+            // Set the parent of the childObject to the grappleObject
+            childObject.transform.SetParent(grappleObject.transform, true);
+            
+            if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
+            {
+                if (!isGrappling)
+                {
+                    // Try to grapple
+                    Debug.Log("Gun: Try grapple");
+                    SetGrapplePoint();
+
+                    // Position helper
+                    childObject.transform.position = grapplePoint;
+                    // Parent only if we hit something
+                    if (grappleObject != null)
+                        childObject.transform.SetParent(grappleObject.transform, true);
+                    else
+                        childObject.transform.SetParent(null, true);
+
+                    // Toggle on only if rope actually enabled
+                    if (grappleRope.enabled)
+                    {
+                        isGrappling = true;
+                    }
+                }
+                else
+                {
+                    // Release grapple
+                    Debug.Log("Gun: Release grapple");
+                    isGrappling = false;
+                    grappleRope.enabled = false;
+                    m_springJoint2D.enabled = false;
+                    m_rigidbody.gravityScale = 1f;
+                    childObject.transform.SetParent(null, true);
+                    grappleObject = null;
+                }
+
+                // Optional aim update on click
+                if (grappleRope.enabled)
+                {
+                    RotateGun(grapplePoint, false);
+                }
+                else
+                {
+                    Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
+                    RotateGun(mousePos, true);
+                }
+
+                // Optional launch assist while already grappling
+                if (launchToPoint && grappleRope.isGrappling)
+                {
+                    if (launchType == LaunchType.Transform_Launch)
+                    {
+                        Vector2 firePointDistnace = firePoint.position - gunHolder.localPosition;
+                        Vector2 targetPos = grapplePoint - firePointDistnace;
+                        gunHolder.position = Vector2.Lerp(gunHolder.position, targetPos, Time.deltaTime * launchSpeed);
+                    }
+                }
+            }
+        }
+        else if (!isPlayer && Singleton.instance.playerObjectMenuReady) // For menu player object
+        {
+            Debug.Log("#343");
+            SetGrapplePoint();
+            // Set the position of the childObject to the grapplePoint
+            childObject.transform.position = grapplePoint;
+
+            // Set the parent of the childObject to the grappleObject
+            childObject.transform.SetParent(grappleObject.transform, true);
+
+            Singleton.instance.playerObjectMenuReady = false;
+        }
+        else
+        {
+            Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
+            if (mousePosActive)
+            {
+                RotateGun(mousePos, true);
+            }
+        }
+        Debug.Log("Gun script 5");
     }
 
     void RotateGun(Vector3 lookPoint, bool allowRotationOverTime)
@@ -198,11 +256,7 @@ public class GrapplingGun : MonoBehaviour
     public void SetGrapplePoint()
     {
         Debug.Log("Set Grapple Point");
-        if (hasPreparedShot)
-        {
-            distanceVector = preparedDirection; // already normalized later
-        }
-        else if (Singleton.instance.playerObjectMenuReady)
+        if (Singleton.instance.playerObjectMenuReady)
         {
             distanceVector = new Vector3(0, 1, 0) - gunPivot.position;
         }
@@ -230,15 +284,13 @@ public class GrapplingGun : MonoBehaviour
             }
             if (_hit == null)
             {
-                grapplePoint = (Vector2)(gunPivot.position) + distanceVector.normalized * maxDistnace;
+                grapplePoint = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position;
                 Debug.Log("Point in the air: " + grapplePoint);
                 grappleObject = null;
                 grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
                 grappleRope.enabled = true;
             }
         }
-
-        hasPreparedShot = false;
     }
 
     public void Grapple()
@@ -344,62 +396,5 @@ public class GrapplingGun : MonoBehaviour
             if (sr != null)
                 sr.color = Color.red;
         }
-    }
-
-    public void DrawLine()
-    {
-        bool pointerDown = Input.GetMouseButtonDown(0);
-        bool pointerHeld = Input.GetMouseButton(0);
-        bool pointerUp = Input.GetMouseButtonUp(0);
-        Vector2 pointerPos = Input.mousePosition;
-
-#if UNITY_ANDROID || UNITY_IOS
-        if (Input.touchCount > 0)
-        {
-            var t = Input.GetTouch(0);
-            pointerPos = t.position;
-            pointerDown = t.phase == TouchPhase.Began;
-            pointerHeld = t.phase == TouchPhase.Moved || t.phase == TouchPhase.Stationary;
-            pointerUp  = t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled;
-        }
-#endif
-        if (pointerDown && mousePosActive)
-        {
-            isDragging = true;
-            dragStartWorld = GetPointerWorldPosition(pointerPos);
-            dragLine.SetPosition(0, dragStartWorld);
-            dragLine.SetPosition(1, dragStartWorld);
-            dragLine.enabled = true;
-        }
-        if (isDragging && pointerHeld)
-        {
-            Vector3 current = GetPointerWorldPosition(pointerPos);
-            // Optional: show inverted line (aim direction) from anchor (gunPivot)
-            Vector2 pull = (Vector2)(current - gunPivot.position);
-            Vector3 invertedEnd = gunPivot.position - (Vector3)pull;
-            dragLine.SetPosition(0, gunPivot.position);
-            dragLine.SetPosition(1, invertedEnd);
-        }
-        if (pointerUp && isDragging)
-        {
-            isDragging = false;
-            dragLine.enabled = false;
-
-            // Prepare shot: aim opposite to pull from gunPivot
-            Vector3 releaseWorld = GetPointerWorldPosition(pointerPos);
-            Vector2 pull = (Vector2)(releaseWorld - gunPivot.position);
-            if (pull.magnitude >= minPullDistance)
-            {
-                preparedDirection = -pull.normalized; // opposite to drag
-                hasPreparedShot = true;
-            }
-        }
-    }
-    private Vector3 GetPointerWorldPosition(Vector2 screenPos)
-    {
-        float z = Mathf.Abs(gunPivot.position.z - m_camera.transform.position.z);
-        Vector3 wp = m_camera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, z));
-        wp.z = gunPivot.position.z;
-        return wp;
     }
 }
