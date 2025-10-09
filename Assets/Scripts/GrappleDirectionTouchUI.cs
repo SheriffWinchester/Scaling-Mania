@@ -1,15 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GrappleDirectionMouseUI : MonoBehaviour
+public class GrappleDirectionTouchUI : MonoBehaviour
 {
     [Header("UI References")]
-    public RectTransform grappleDirectionUI;  // Your UI object (e.g. arrow or circle)
-    public float activationDistance = 20f;    // Minimum drag distance to show UI
-    public float maxRadius = 100f;            // Max distance before UI disappears
+    public RectTransform grappleDirectionUI;
+    public Canvas canvas; // assign your Canvas in Inspector
+
+    public float activationDistance = 20f;
+    public float maxRadius = 100f;
 
     private Vector2 startPos;
+    public Vector2 direction;
     private bool isDragging = false;
+    public bool circleOut = false;
     private bool uiVisible = false;
 
     void Start()
@@ -20,57 +24,63 @@ public class GrappleDirectionMouseUI : MonoBehaviour
 
     void Update()
     {
-        // Mouse button pressed
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Mouse Down");
-            startPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.transform as RectTransform,
+                Input.mousePosition,
+                canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
+                out startPos);
             Debug.Log("Start Pos: " + startPos);
             isDragging = true;
             uiVisible = false;
         }
 
-        // Mouse button held
         if (isDragging && Input.GetMouseButton(0))
         {
-            Vector2 currentPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.transform as RectTransform,
+                Input.mousePosition,
+                canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
+                out Vector2 currentPos);
+            Debug.Log("Current Pos: " + currentPos);
             float distance = Vector2.Distance(currentPos, startPos);
-            Debug.Log("Mouse Dragging: " + distance);
-            // Show UI once we drag past activation distance
+
             if (!uiVisible && distance > activationDistance)
             {
+                Debug.Log("UI Activated");
                 uiVisible = true;
                 grappleDirectionUI.gameObject.SetActive(true);
-                grappleDirectionUI.position = startPos;
+                grappleDirectionUI.anchoredPosition = startPos; // ✅ use anchoredPosition, not position
             }
 
             if (uiVisible)
             {
-                Vector2 direction = currentPos - startPos;
-
-                // If beyond max radius → hide UI
+                direction = currentPos - startPos;
+                Debug.Log("Direction: " + direction);
+                Debug.Log("Direction magnitude: " + direction.magnitude);
                 if (direction.magnitude > maxRadius)
                 {
                     uiVisible = false;
                     grappleDirectionUI.gameObject.SetActive(false);
+                    circleOut = true;
                     return;
                 }
 
-                // Rotate UI to face drag direction
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                //grappleDirectionUI.rotation = Quaternion.Euler(0, 0, angle - 90);
+                grappleDirectionUI.rotation = Quaternion.Euler(0, 0, angle - 90);
             }
         }
 
-        // Mouse button released
         if (Input.GetMouseButtonUp(0))
         {
             isDragging = false;
-
+            circleOut = false;
             if (uiVisible)
             {
                 uiVisible = false;
                 grappleDirectionUI.gameObject.SetActive(false);
+                circleOut = true;
             }
         }
     }

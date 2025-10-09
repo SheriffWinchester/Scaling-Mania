@@ -30,20 +30,25 @@ namespace State.Menu
             menuPlayer = GameObject.Find("MenuPlayer");
             gamePlayer = GameObject.Find("TrackManager").transform.Find("GamePlayer").gameObject;
             grapplingGun = menuPlayer.GetComponent<GrapplingGun>();
-            
+
             menuPlayer.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = false;
             menuPlayer.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
             Singleton.instance.playerObjectMenuReady = true;
-            grapplingGun.SetGrapplePoint();
 
-            trackManager.SetActive(true);
+            try
+            {
+                grapplingGun.SetGrapplePoint(); // or SetGrapplePoint(true) if you use that overload
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"SetGrapplePoint threw: {ex}");
+            }
+
             Debug.Log("Play Button Pressed");
-            
-            //Change the global state to Game
+            trackManager.SetActive(true);
+
             stateController.SetActiveGlobalState(StateController.GlobalState.Game);
-            //Move the camera, change the state to Game and set the canvas to active
             Invoke("MoveCamera", 1f);
-            
         }
 
         void MoveCamera()

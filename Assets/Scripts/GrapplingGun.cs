@@ -6,6 +6,7 @@ public class GrapplingGun : MonoBehaviour
 {
     [Header("Scripts Ref:")]
     public GrapplingRope grappleRope;
+    public GrappleDirectionTouchUI grappleDirectionTouchUI;
 
     [Header("Layers Settings:")]
     [SerializeField] private bool grappleToAll = false;
@@ -94,7 +95,7 @@ public class GrapplingGun : MonoBehaviour
         else if (!isPlayer && Singleton.instance.playerObjectMenuReady) // For menu player object
         {
             Debug.Log("#343");
-            SetGrapplePoint();
+            SetGrapplePoint(isPlayer);
             // Set the position of the childObject to the grapplePoint
             childObject.transform.position = grapplePoint;
 
@@ -156,7 +157,7 @@ public class GrapplingGun : MonoBehaviour
 
             // Set the parent of the childObject to the grappleObject
             childObject.transform.SetParent(grappleObject.transform, true);
-            
+
             if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
             {
                 if (!isGrappling)
@@ -217,7 +218,7 @@ public class GrapplingGun : MonoBehaviour
         else if (!isPlayer && Singleton.instance.playerObjectMenuReady) // For menu player object
         {
             Debug.Log("#343");
-            SetGrapplePoint();
+            SetGrapplePoint(isPlayer);
             // Set the position of the childObject to the grapplePoint
             childObject.transform.position = grapplePoint;
 
@@ -253,7 +254,7 @@ public class GrapplingGun : MonoBehaviour
         }
     }
 
-    public void SetGrapplePoint()
+    public void SetGrapplePoint(bool isPlayer = true)
     {
         Debug.Log("Set Grapple Point");
         if (Singleton.instance.playerObjectMenuReady)
@@ -264,9 +265,17 @@ public class GrapplingGun : MonoBehaviour
         {
             distanceVector = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position;
         }
-        if (Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable))
+        if (Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable)
+            || grappleDirectionTouchUI.circleOut == true)
         {
-            _hit = Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable);
+            if (isPlayer == false)
+            {
+                _hit = Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable);
+            }
+            else
+            {
+                _hit = Physics2D.Raycast(origin: firePoint.position, direction: grappleDirectionTouchUI.direction, distance: maxDistnace, layerMask: layerMaskGrappable);
+            }
             Debug.Log(_hit.transform.name);
             if (_hit.transform.gameObject.layer == grappableLayerNumber || grappleToAll)
             {
