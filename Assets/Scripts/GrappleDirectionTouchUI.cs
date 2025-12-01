@@ -15,6 +15,8 @@ public class GrappleDirectionTouchUI : MonoBehaviour
     private bool isDragging = false;
     public bool circleOut = false;
     private bool uiVisible = false;
+    
+    public Vector2 inversedDirection;
 
     void Start()
     {
@@ -24,7 +26,7 @@ public class GrappleDirectionTouchUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) //Click to initiate drag until the circle is visible
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvas.transform as RectTransform,
@@ -36,7 +38,7 @@ public class GrappleDirectionTouchUI : MonoBehaviour
             uiVisible = false;
         }
 
-        if (isDragging && Input.GetMouseButton(0))
+        if (isDragging && Input.GetMouseButton(0)) //Continue dragging, show UI when distance is enough
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvas.transform as RectTransform,
@@ -46,7 +48,7 @@ public class GrappleDirectionTouchUI : MonoBehaviour
             Debug.Log("Current Pos: " + currentPos);
             float distance = Vector2.Distance(currentPos, startPos);
 
-            if (!uiVisible && distance > activationDistance)
+            if (!uiVisible && distance > activationDistance) // Switch on UI 
             {
                 Debug.Log("UI Activated");
                 uiVisible = true;
@@ -54,7 +56,7 @@ public class GrappleDirectionTouchUI : MonoBehaviour
                 grappleDirectionUI.anchoredPosition = startPos; // ✅ use anchoredPosition, not position
             }
 
-            if (uiVisible)
+            if (uiVisible) // Switch off UI when max radius exceeded, else update direction
             {
                 direction = currentPos - startPos;
                 Debug.Log("Direction: " + direction);
@@ -64,6 +66,7 @@ public class GrappleDirectionTouchUI : MonoBehaviour
                     uiVisible = false;
                     grappleDirectionUI.gameObject.SetActive(false);
                     circleOut = true;
+                    inversedDirection = -direction;
                     return;
                 }
 
@@ -72,7 +75,7 @@ public class GrappleDirectionTouchUI : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0)) // Off UI
         {
             isDragging = false;
             circleOut = false;

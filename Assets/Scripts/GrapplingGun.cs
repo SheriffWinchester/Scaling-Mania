@@ -274,7 +274,7 @@ public class GrapplingGun : MonoBehaviour
             }
             else
             {
-                _hit = Physics2D.Raycast(origin: firePoint.position, direction: grappleDirectionTouchUI.direction, distance: maxDistnace, layerMask: layerMaskGrappable);
+                _hit = Physics2D.Raycast(origin: firePoint.position, direction: grappleDirectionTouchUI.inversedDirection, distance: maxDistnace, layerMask: layerMaskGrappable);
             }
             Debug.Log(_hit.transform.name);
             if (_hit.transform.gameObject.layer == grappableLayerNumber || grappleToAll)
