@@ -7,18 +7,19 @@ public class SettingsScript : MonoBehaviour
 {
     [Header("Sound Settings")]
     public bool soundEnabled = true;
-    
-    [Header("UI Elements")]
     public Sprite soundOnSprite;
     public Sprite soundOffSprite;
+    public Image soundButtonImage;
     //public Button soundButton; // assign your button in the Inspector
-
-    private Image buttonImage;
+    [Header("Input Type Settings")]
+    public Sprite inputClassicSprite;
+    public Sprite inputAlternativeSprite;
+    public Image inputButtonImage;
 
     void Start()
     {
-        buttonImage = GetComponent<Image>();
-        UpdateButtonSprite();
+        UpdateSoundButtonSprite();
+        UpdateInputButtonSprite();
 
         // Add listener so pressing the button calls ToggleSound
         //soundButton.onClick.AddListener(ToggleSound);
@@ -27,14 +28,39 @@ public class SettingsScript : MonoBehaviour
     public void ToggleSound()
     {
         soundEnabled = !soundEnabled;
-        UpdateButtonSprite();
+        UpdateSoundButtonSprite();
 
         // Here you can also mute/unmute audio globally if needed:
         AudioListener.volume = soundEnabled ? 1f : 0f;
     }
-
-    private void UpdateButtonSprite()
+    public void ToggleInputType()
     {
-            buttonImage.sprite = soundEnabled ? soundOnSprite : soundOffSprite;
+        // Toggle between Classic and Alternative
+        Singleton.instance.inputType = (Singleton.instance.inputType == Singleton.InputType.Classic) ?
+            Singleton.InputType.Alternative :
+            Singleton.InputType.Classic;
+
+        UpdateInputButtonSprite();
+
+        // Update all GrapplingGun components with the new input type
+        //UpdateGrapplingGunInputType();
+    }
+
+
+    private void UpdateSoundButtonSprite()
+    {
+        if (soundButtonImage != null)
+        {
+            soundButtonImage.sprite = soundEnabled ? soundOnSprite : soundOffSprite;
+        }
+    }
+    private void UpdateInputButtonSprite()
+    {
+        if (inputButtonImage != null)
+        {
+            inputButtonImage.sprite = (Singleton.instance.inputType == Singleton.InputType.Classic) ? 
+                inputClassicSprite : 
+                inputAlternativeSprite;
+        }
     }
 }

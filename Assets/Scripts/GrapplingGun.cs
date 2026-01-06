@@ -64,23 +64,36 @@ public class GrapplingGun : MonoBehaviour
 
     bool isGrappling = false;
     int layerMaskGrappable = 1 << 8;
-
     private void Start()
     {
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
         childObject = new GameObject("ChildObject");
+        //grappleDirectionTouchUI = FindObjectOfType<GrappleDirectionTouchUI>();
 
     }
 
     private void Update()
     {
         //Debug.Log("Camera: " + m_camera.WorldToViewportPoint(transform.position));
-        //ClassicInput();
-        AlternativeInput();
+        // Switch between input methods based on InputType
+        switch (Singleton.instance.inputType)
+        {
+            case Singleton.InputType.Classic:
+                ClassicInput();
+                break;
+            case Singleton.InputType.Alternative:
+                AlternativeInput();
+                break;
+        }
     }
     private void ClassicInput()
     {
+        Singleton.instance.inputType = Singleton.InputType.Classic;
+        if (grappleDirectionTouchUI.enabled == true)
+        {
+            grappleDirectionTouchUI.enabled = false;
+        }
         DrawCursor();
         if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
         {
@@ -91,18 +104,6 @@ public class GrapplingGun : MonoBehaviour
 
             // Set the parent of the childObject to the grappleObject
             childObject.transform.SetParent(grappleObject.transform, true);
-        }
-        else if (!isPlayer && Singleton.instance.playerObjectMenuReady) // For menu player object
-        {
-            Debug.Log("#343");
-            SetGrapplePoint(isPlayer);
-            // Set the position of the childObject to the grapplePoint
-            childObject.transform.position = grapplePoint;
-
-            // Set the parent of the childObject to the grappleObject
-            childObject.transform.SetParent(grappleObject.transform, true);
-
-            Singleton.instance.playerObjectMenuReady = false;
         }
         else if (Input.GetKey(KeyCode.Mouse0))
         {
@@ -143,89 +144,49 @@ public class GrapplingGun : MonoBehaviour
                 RotateGun(mousePos, true);
             }
         }
+
+        if (isPlayer) // When in player mode - switch off this variable so you can rotate gun
+        {
+            Singleton.instance.playerObjectMenuReady = false;
+        }
         Debug.Log("Gun script 5");
     }
     private void AlternativeInput()
     {
+        Singleton.instance.inputType = Singleton.InputType.Alternative;
         DrawCursor();
-        if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
+
+        if (grappleDirectionTouchUI.enabled == false)
         {
-            Debug.Log("Gun script 1");
+            grappleDirectionTouchUI.enabled = true;
+        }
+        if (grappleDirectionTouchUI.circleOut)
+        {
             SetGrapplePoint();
+
             // Set the position of the childObject to the grapplePoint
             childObject.transform.position = grapplePoint;
 
             // Set the parent of the childObject to the grappleObject
-            childObject.transform.SetParent(grappleObject.transform, true);
-
-            if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
+            if (grappleObject != null)
             {
-                if (!isGrappling)
-                {
-                    // Try to grapple
-                    Debug.Log("Gun: Try grapple");
-                    SetGrapplePoint();
-
-                    // Position helper
-                    childObject.transform.position = grapplePoint;
-                    // Parent only if we hit something
-                    if (grappleObject != null)
-                        childObject.transform.SetParent(grappleObject.transform, true);
-                    else
-                        childObject.transform.SetParent(null, true);
-
-                    // Toggle on only if rope actually enabled
-                    if (grappleRope.enabled)
-                    {
-                        isGrappling = true;
-                    }
-                }
-                else
-                {
-                    // Release grapple
-                    Debug.Log("Gun: Release grapple");
-                    isGrappling = false;
-                    grappleRope.enabled = false;
-                    m_springJoint2D.enabled = false;
-                    m_rigidbody.gravityScale = 1f;
-                    childObject.transform.SetParent(null, true);
-                    grappleObject = null;
-                }
-
-                // Optional aim update on click
-                if (grappleRope.enabled)
-                {
-                    RotateGun(grapplePoint, false);
-                }
-                else
-                {
-                    Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
-                    RotateGun(mousePos, true);
-                }
-
-                // Optional launch assist while already grappling
-                if (launchToPoint && grappleRope.isGrappling)
-                {
-                    if (launchType == LaunchType.Transform_Launch)
-                    {
-                        Vector2 firePointDistnace = firePoint.position - gunHolder.localPosition;
-                        Vector2 targetPos = grapplePoint - firePointDistnace;
-                        gunHolder.position = Vector2.Lerp(gunHolder.position, targetPos, Time.deltaTime * launchSpeed);
-                    }
-                }
+                childObject.transform.SetParent(grappleObject.transform, true);
+                isGrappling = true;
             }
         }
-        else if (!isPlayer && Singleton.instance.playerObjectMenuReady) // For menu player object
+        if (Input.GetMouseButtonDown(0) && isGrappling)
         {
-            Debug.Log("#343");
-            SetGrapplePoint(isPlayer);
-            // Set the position of the childObject to the grapplePoint
-            childObject.transform.position = grapplePoint;
-
-            // Set the parent of the childObject to the grappleObject
-            childObject.transform.SetParent(grappleObject.transform, true);
-
-            Singleton.instance.playerObjectMenuReady = false;
+            isGrappling = false;
+            grappleRope.enabled = false;
+            m_springJoint2D.enabled = false;
+            m_rigidbody.gravityScale = 1f;
+            childObject.transform.SetParent(null, true);
+            grappleObject = null;
+        }
+        // Handle rotation
+        if (grappleRope.enabled)
+        {
+            RotateGun(grapplePoint, false);
         }
         else
         {
@@ -234,6 +195,87 @@ public class GrapplingGun : MonoBehaviour
             {
                 RotateGun(mousePos, true);
             }
+        }
+
+        // if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
+        // {
+        //     Debug.Log("Gun script 1");
+        //     SetGrapplePoint();
+        //     // Set the position of the childObject to the grapplePoint
+        //     childObject.transform.position = grapplePoint;
+
+        //     // Set the parent of the childObject to the grappleObject
+        //     childObject.transform.SetParent(grappleObject.transform, true);
+
+        //     if (Input.GetKeyDown(KeyCode.Mouse0) && mousePosActive)
+        //     {
+        //         if (!isGrappling)
+        //         {
+        //             // Try to grapple
+        //             Debug.Log("Gun: Try grapple");
+        //             SetGrapplePoint();
+
+        //             // Position helper
+        //             childObject.transform.position = grapplePoint;
+        //             // Parent only if we hit something
+        //             if (grappleObject != null)
+        //                 childObject.transform.SetParent(grappleObject.transform, true);
+        //             else
+        //                 childObject.transform.SetParent(null, true);
+
+        //             // Toggle on only if rope actually enabled
+        //             if (grappleRope.enabled)
+        //             {
+        //                 isGrappling = true;
+        //             }
+        //         }
+        //         else
+        //         {
+        //             // Release grapple
+        //             Debug.Log("Gun: Release grapple");
+        //             isGrappling = false;
+        //             grappleRope.enabled = false;
+        //             m_springJoint2D.enabled = false;
+        //             m_rigidbody.gravityScale = 1f;
+        //             childObject.transform.SetParent(null, true);
+        //             grappleObject = null;
+        //         }
+
+        //         // Optional aim update on click
+        //         if (grappleRope.enabled)
+        //         {
+        //             RotateGun(grapplePoint, false);
+        //         }
+        //         else
+        //         {
+        //             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
+        //             RotateGun(mousePos, true);
+        //         }
+
+        //         // Optional launch assist while already grappling
+        //         if (launchToPoint && grappleRope.isGrappling)
+        //         {
+        //             if (launchType == LaunchType.Transform_Launch)
+        //             {
+        //                 Vector2 firePointDistnace = firePoint.position - gunHolder.localPosition;
+        //                 Vector2 targetPos = grapplePoint - firePointDistnace;
+        //                 gunHolder.position = Vector2.Lerp(gunHolder.position, targetPos, Time.deltaTime * launchSpeed);
+        //             }
+        //         }
+        //     }
+        // }
+        // else
+        // {
+        //     Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
+        //     if (mousePosActive)
+        //     {
+        //         RotateGun(mousePos, true);
+        //     }
+        // }
+
+        if (isPlayer) // When in player mode - switch off this variable so you can rotate gun
+        {
+            Singleton.instance.playerObjectMenuReady = false;
         }
         Debug.Log("Gun script 5");
     }
@@ -257,24 +299,27 @@ public class GrapplingGun : MonoBehaviour
     public void SetGrapplePoint(bool isPlayer = true)
     {
         Debug.Log("Set Grapple Point");
-        if (Singleton.instance.playerObjectMenuReady)
+        if (Singleton.instance.playerObjectMenuReady) // For non-player object in the menu
         {
             distanceVector = new Vector3(0, 1, 0) - gunPivot.position;
         }
-        else
+        else // For player object
         {
             distanceVector = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position;
         }
-        if (Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable)
-            || grappleDirectionTouchUI.circleOut == true)
+        if (Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable))
         {
-            if (isPlayer == false)
+            if (Singleton.instance.playerObjectMenuReady) // For non-player object in the menu
             {
                 _hit = Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable);
             }
-            else
+            if (Singleton.instance.inputType == Singleton.InputType.Alternative && !Singleton.instance.playerObjectMenuReady) // For Alternative input, use direction variable from grappleDirectionTouchUI
             {
-                _hit = Physics2D.Raycast(origin: firePoint.position, direction: grappleDirectionTouchUI.direction, distance: maxDistnace, layerMask: layerMaskGrappable);
+                _hit = Physics2D.Raycast(origin: firePoint.position, direction: -grappleDirectionTouchUI.direction, distance: maxDistnace, layerMask: layerMaskGrappable); //Direction variable is reversed, for touch inputs
+            }
+            if (Singleton.instance.inputType == Singleton.InputType.Classic && !Singleton.instance.playerObjectMenuReady) // For Classic input
+            {
+                _hit = Physics2D.Raycast(origin: firePoint.position, direction: distanceVector.normalized, distance: maxDistnace, layerMask: layerMaskGrappable);
             }
             Debug.Log(_hit.transform.name);
             if (_hit.transform.gameObject.layer == grappableLayerNumber || grappleToAll)
@@ -405,5 +450,22 @@ public class GrapplingGun : MonoBehaviour
             if (sr != null)
                 sr.color = Color.red;
         }
+    }
+    public void ResetGrappleInput()
+    {
+        isGrappling = false;
+
+        if (grappleDirectionTouchUI != null)
+        {
+            grappleDirectionTouchUI.circleOut = false;
+            grappleDirectionTouchUI.direction = Vector2.zero;
+        }
+
+        grappleRope.enabled = false;
+        m_springJoint2D.enabled = false;
+        m_rigidbody.gravityScale = 1f;
+
+        childObject.transform.SetParent(null, true);
+        grappleObject = null;
     }
 }

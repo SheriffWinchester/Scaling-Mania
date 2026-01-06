@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public GrapplingGun grapplingGun;
     public float jumpForce = 5f;
     public float jumpDelay = 3f;
-    private float jumpTimer = 0f;
+    private float jumpTimer = 4f;
 
     float horizontalInput;
 
@@ -26,9 +26,10 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Update()
-    {   
+    {
         // Update the jump timer
         jumpTimer += Time.deltaTime;
+        Debug.Log("Jump Timer: " + jumpTimer);
     }
     void FixedUpdate()
     {
@@ -50,7 +51,6 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(new Vector2((horizontalInput * movementSpeed) * Time.fixedDeltaTime, 0));
             Debug.Log("Moving: " + horizontalInput);
         }
-
         if (jumpTimer >= jumpDelay)
         {
             // Touch (Mobile)
@@ -71,10 +71,20 @@ public class PlayerMovement : MonoBehaviour
     {
         // Implement the jump logic here
         // For example, applying an upward force to the player's Rigidbody2D
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // Adjust the force as needed
+        }
+    }
+    public void JumpButton()
+    {
+        if (jumpTimer >= jumpDelay)
+        {
+            if (rb != null)
+            {
+                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // Adjust the force as needed
+            }
+            jumpTimer = 0f;
         }
     }
 }

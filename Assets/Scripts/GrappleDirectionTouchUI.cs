@@ -15,6 +15,7 @@ public class GrappleDirectionTouchUI : MonoBehaviour
     private bool isDragging = false;
     public bool circleOut = false;
     private bool uiVisible = false;
+    private bool hasTriggeredCircleOut = false; // Add this flag
 
     void Start()
     {
@@ -24,6 +25,12 @@ public class GrappleDirectionTouchUI : MonoBehaviour
 
     void Update()
     {
+        // Reset circleOut at the beginning of each frame
+        if (circleOut)
+        {
+            circleOut = false;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -34,6 +41,7 @@ public class GrappleDirectionTouchUI : MonoBehaviour
             Debug.Log("Start Pos: " + startPos);
             isDragging = true;
             uiVisible = false;
+            hasTriggeredCircleOut = false; // Reset flag when starting new drag
         }
 
         if (isDragging && Input.GetMouseButton(0))
@@ -51,7 +59,7 @@ public class GrappleDirectionTouchUI : MonoBehaviour
                 Debug.Log("UI Activated");
                 uiVisible = true;
                 grappleDirectionUI.gameObject.SetActive(true);
-                grappleDirectionUI.anchoredPosition = startPos; // ✅ use anchoredPosition, not position
+                grappleDirectionUI.anchoredPosition = startPos;
             }
 
             if (uiVisible)
@@ -59,11 +67,15 @@ public class GrappleDirectionTouchUI : MonoBehaviour
                 direction = currentPos - startPos;
                 Debug.Log("Direction: " + direction);
                 Debug.Log("Direction magnitude: " + direction.magnitude);
-                if (direction.magnitude > maxRadius)
+                
+                // Only trigger circleOut once per drag gesture
+                if (direction.magnitude > maxRadius && !hasTriggeredCircleOut)
                 {
                     uiVisible = false;
                     grappleDirectionUI.gameObject.SetActive(false);
                     circleOut = true;
+                    hasTriggeredCircleOut = true; // Mark that we've triggered it
+                    Debug.Log("Circle Out Triggered");
                     return;
                 }
 
@@ -75,12 +87,12 @@ public class GrappleDirectionTouchUI : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             isDragging = false;
-            circleOut = false;
+            hasTriggeredCircleOut = false; // Reset flag when releasing button
             if (uiVisible)
             {
                 uiVisible = false;
                 grappleDirectionUI.gameObject.SetActive(false);
-                circleOut = true;
+                // Don't set circleOut here since we want it only when dragging beyond maxRadius
             }
         }
     }

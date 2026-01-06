@@ -15,17 +15,23 @@ public class Singleton : MonoBehaviour
     public bool gameStarted = false;
     public bool gameStartedMoveCamera = false;
     public bool playerObjectMenuReady = false;
-    private void Awake() 
-    { 
+    public enum InputType
+    {
+        Classic,
+        Alternative
+    }
+    public InputType inputType = InputType.Classic;
+    private void Awake()
+    {
         // If there is an instance, and it's not me, delete myself.
-        
-        if (instance != null && instance != this) 
-        { 
-            Destroy(this); 
-        } 
-        else 
-        { 
-            instance = this; 
-        } 
+
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            instance = this;
+        }
     }
 }
